@@ -33,6 +33,63 @@
 
 ---
 
+## Tool Calling 시퀀스 다이어그램
+
+다음은 LLM → Spring AI → Tools 간의 전체 호출 흐름을 보여주는 시퀀스 다이어그램입니다.
+
+```mermaid
+sequenceDiagram
+    participant App as Application
+    participant CC as ChatClient
+    participant SA as Spring AI<br/>Framework
+    participant LLM as LLM API
+    participant Tools as Tool Methods<br/>(@Tool)
+
+    App->>CC: chatClient.prompt()<br/>.user(question)<br/>.tools(tools)<br/>.call()
+    
+    Note over CC,SA: 1. Tool 정보 수집 및 변환
+    CC->>SA: Tool 정보 수집<br/>(@Tool 어노테이션 스캔)
+    SA->>SA: Function 스키마로 변환
+    
+    Note over SA,LLM: 2. 초기 요청 전송
+    SA->>LLM: HTTP POST<br/>messages + tools<br/>(Function 스키마)
+    
+    Note over LLM: 3. LLM이 Tool Call 결정
+    LLM->>SA: Tool Call 응답<br/>{role: "assistant",<br/>tool_calls: [...]}
+    
+    Note over SA,Tools: 4. Tool 메서드 실행
+    SA->>SA: tool_calls 감지<br/>JSON 파라미터 파싱<br/>toolContext 주입
+    SA->>Tools: Java 메서드 호출<br/>(예: getTemperature())
+    Tools->>SA: 실행 결과 반환<br/>(예: 22)
+    SA->>SA: 결과를 JSON으로 직렬화
+    
+    Note over SA,LLM: 5. Tool 결과 전달
+    SA->>LLM: HTTP POST<br/>Tool 결과 메시지 추가<br/>{role: "tool", content: "22"}
+    
+    alt 추가 Tool Call 필요
+        LLM->>SA: 추가 Tool Call<br/>(예: startHeatingSystem)
+        SA->>Tools: Java 메서드 호출
+        Tools->>SA: 실행 결과
+        SA->>LLM: Tool 결과 전달
+    end
+    
+    Note over LLM: 6. 최종 응답 생성
+    LLM->>SA: 최종 응답<br/>{role: "assistant",<br/>content: "텍스트 응답"}
+    SA->>CC: ChatResponse
+    CC->>App: .content()<br/>최종 텍스트 반환
+```
+
+**다이어그램 설명:**
+
+1. **Tool 정보 수집**: Spring AI가 `@Tool` 어노테이션을 스캔하여 Function 스키마로 변환
+2. **초기 요청**: 사용자 질문과 Tool 정보를 LLM에 전송
+3. **Tool Call 결정**: LLM이 필요한 Tool을 결정하고 호출 요청
+4. **Tool 실행**: Spring AI가 Java 메서드를 호출하고 결과를 수집
+5. **결과 전달**: Tool 실행 결과를 LLM에 전달
+6. **반복 또는 최종 응답**: 추가 Tool Call이 필요하면 반복, 아니면 최종 응답 생성
+
+---
+
 ## 1. Tool 등록 및 변환 과정
 
 ### 1.1 Java 코드에서 Tool 정의
