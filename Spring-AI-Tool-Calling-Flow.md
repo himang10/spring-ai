@@ -33,7 +33,7 @@
 
 ---
 
-## Tool Calling 시퀀스 다이어그램 {#tool-calling-시퀀스-다이어그램}
+## Tool Calling 시퀀스 다이어그램 {#sequence-diagram}
 
 다음은 LLM → Spring AI → Tools 간의 전체 호출 흐름을 보여주는 시퀀스 다이어그램입니다.
 
@@ -87,22 +87,22 @@ sequenceDiagram
 
 | 단계 | 다이어그램 메시지 | JSON 구조 참조 |
 |------|------------------|----------------|
-| **1. Tool 정보 수집** | `CC->>SA: Tool 정보 수집`<br/>`SA->>SA: Function 스키마로 변환` | [→ 1.3 LLM에 전달되는 Function 스키마](#13-llm에-전달되는-function-스키마) |
-| **2. 초기 요청 전송** | `SA->>LLM: HTTP POST<br/>messages + tools` | [→ 2.2 Spring AI → LLM 초기 요청 구조](#22-spring-ai--llm-초기-요청-구조) |
-| **3. Tool Call 결정** | `LLM->>SA: Tool Call 응답` | [→ 3.2 LLM → Spring AI Tool Call 응답](#32-llm--spring-ai-tool-call-응답) |
-| **4. Tool 메서드 실행** | `SA->>Tools: Java 메서드 호출`<br/>`Tools->>SA: 실행 결과 반환` | [→ 4. Spring AI의 Tool 실행](#4-spring-ai의-tool-실행) |
-| **5. Tool 결과 전달** | `SA->>LLM: Tool 결과 메시지 추가` | [→ 5.1 Tool 실행 결과 메시지](#51-tool-실행-결과-메시지) |
-| **6. 추가 Tool Call** | `LLM->>SA: 추가 Tool Call` | [→ 3.2 LLM → Spring AI Tool Call 응답](#32-llm--spring-ai-tool-call-응답) |
-| **7. 최종 응답** | `LLM->>SA: 최종 응답` | [→ 6.2 전체 메시지 히스토리 예시](#62-전체-메시지-히스토리-예시) |
+| **1. Tool 정보 수집** | `CC->>SA: Tool 정보 수집`<br/>`SA->>SA: Function 스키마로 변환` | [→ 1.3 LLM에 전달되는 Function 스키마](#function-schema) |
+| **2. 초기 요청 전송** | `SA->>LLM: HTTP POST<br/>messages + tools` | [→ 2.2 Spring AI → LLM 초기 요청 구조](#initial-request) |
+| **3. Tool Call 결정** | `LLM->>SA: Tool Call 응답` | [→ 3.2 LLM → Spring AI Tool Call 응답](#tool-call-response) |
+| **4. Tool 메서드 실행** | `SA->>Tools: Java 메서드 호출`<br/>`Tools->>SA: 실행 결과 반환` | [→ 4. Spring AI의 Tool 실행](#tool-execution) |
+| **5. Tool 결과 전달** | `SA->>LLM: Tool 결과 메시지 추가` | [→ 5.1 Tool 실행 결과 메시지](#tool-result) |
+| **6. 추가 Tool Call** | `LLM->>SA: 추가 Tool Call` | [→ 3.2 LLM → Spring AI Tool Call 응답](#tool-call-response) |
+| **7. 최종 응답** | `LLM->>SA: 최종 응답` | [→ 6.2 전체 메시지 히스토리 예시](#message-history) |
 
 **상세 설명:**
 
-1. **Tool 정보 수집**: Spring AI가 `@Tool` 어노테이션을 스캔하여 Function 스키마로 변환 → [Function 스키마 예시](#13-llm에-전달되는-function-스키마)
-2. **초기 요청**: 사용자 질문과 Tool 정보를 LLM에 전송 → [초기 요청 JSON 구조](#22-spring-ai--llm-초기-요청-구조)
-3. **Tool Call 결정**: LLM이 필요한 Tool을 결정하고 호출 요청 → [Tool Call 응답 JSON](#32-llm--spring-ai-tool-call-응답)
-4. **Tool 실행**: Spring AI가 Java 메서드를 호출하고 결과를 수집 → [Tool 실행 과정](#4-spring-ai의-tool-실행)
-5. **결과 전달**: Tool 실행 결과를 LLM에 전달 → [Tool 결과 메시지](#51-tool-실행-결과-메시지)
-6. **반복 또는 최종 응답**: 추가 Tool Call이 필요하면 반복, 아니면 최종 응답 생성 → [전체 메시지 히스토리](#62-전체-메시지-히스토리-예시)
+1. **Tool 정보 수집**: Spring AI가 `@Tool` 어노테이션을 스캔하여 Function 스키마로 변환 → [Function 스키마 예시](#function-schema)
+2. **초기 요청**: 사용자 질문과 Tool 정보를 LLM에 전송 → [초기 요청 JSON 구조](#initial-request)
+3. **Tool Call 결정**: LLM이 필요한 Tool을 결정하고 호출 요청 → [Tool Call 응답 JSON](#tool-call-response)
+4. **Tool 실행**: Spring AI가 Java 메서드를 호출하고 결과를 수집 → [Tool 실행 과정](#tool-execution)
+5. **결과 전달**: Tool 실행 결과를 LLM에 전달 → [Tool 결과 메시지](#tool-result)
+6. **반복 또는 최종 응답**: 추가 Tool Call이 필요하면 반복, 아니면 최종 응답 생성 → [전체 메시지 히스토리](#message-history)
 
 ---
 
@@ -140,9 +140,9 @@ public class HeatingSystemTools {
 3. 메서드 시그니처, 파라미터, 반환 타입을 분석
 4. Function Calling 스키마로 변환
 
-### 1.3 LLM에 전달되는 Function 스키마 {#13-llm에-전달되는-function-스키마}
+### 1.3 LLM에 전달되는 Function 스키마 {#function-schema}
 
-**📌 시퀀스 다이어그램 참조:** [Tool 정보 수집 단계](#tool-calling-시퀀스-다이어그램)
+**📌 시퀀스 다이어그램 참조:** [Tool 정보 수집 단계](#sequence-diagram)
 
 ```json
 {
@@ -202,9 +202,9 @@ String answer = chatClient.prompt()
     .content();
 ```
 
-### 2.2 Spring AI → LLM 초기 요청 구조 {#22-spring-ai--llm-초기-요청-구조}
+### 2.2 Spring AI → LLM 초기 요청 구조 {#initial-request}
 
-**📌 시퀀스 다이어그램 참조:** [초기 요청 전송 단계](#tool-calling-시퀀스-다이어그램)
+**📌 시퀀스 다이어그램 참조:** [초기 요청 전송 단계](#sequence-diagram)
 
 ```json
 {
@@ -272,9 +272,9 @@ LLM은 사용자 질문과 사용 가능한 Tool을 분석하여:
 - 현재 온도 확인 필요 → `getTemperature()` 호출
 - 설정 온도와 비교 → `startHeatingSystem()` 또는 `stopHeatingSystem()` 호출
 
-### 3.2 LLM → Spring AI Tool Call 응답 {#32-llm--spring-ai-tool-call-응답}
+### 3.2 LLM → Spring AI Tool Call 응답 {#tool-call-response}
 
-**📌 시퀀스 다이어그램 참조:** [Tool Call 결정 단계](#tool-calling-시퀀스-다이어그램)
+**📌 시퀀스 다이어그램 참조:** [Tool Call 결정 단계](#sequence-diagram)
 
 ```json
 {
@@ -304,9 +304,9 @@ LLM은 사용자 질문과 사용 가능한 Tool을 분석하여:
 
 ---
 
-## 4. Spring AI의 Tool 실행 {#4-spring-ai의-tool-실행}
+## 4. Spring AI의 Tool 실행 {#tool-execution}
 
-**📌 시퀀스 다이어그램 참조:** [Tool 메서드 실행 단계](#tool-calling-시퀀스-다이어그램)
+**📌 시퀀스 다이어그램 참조:** [Tool 메서드 실행 단계](#sequence-diagram)
 
 ### 4.1 Tool Call 감지 및 메서드 호출
 
@@ -367,9 +367,9 @@ String result = heatingSystemTools.startHeatingSystem(25, toolContext);
 
 ## 5. Tool 결과를 LLM에 전달
 
-### 5.1 Tool 실행 결과 메시지 {#51-tool-실행-결과-메시지}
+### 5.1 Tool 실행 결과 메시지 {#tool-result}
 
-**📌 시퀀스 다이어그램 참조:** [Tool 결과 전달 단계](#tool-calling-시퀀스-다이어그램)
+**📌 시퀀스 다이어그램 참조:** [Tool 결과 전달 단계](#sequence-diagram)
 
 Spring AI는 Tool 실행 결과를 메시지 히스토리에 추가:
 
@@ -468,9 +468,9 @@ chatClient.call() 실행
    - content 필드의 텍스트 반환
 ```
 
-### 6.2 전체 메시지 히스토리 예시 {#62-전체-메시지-히스토리-예시}
+### 6.2 전체 메시지 히스토리 예시 {#message-history}
 
-**📌 시퀀스 다이어그램 참조:** [최종 응답 단계](#tool-calling-시퀀스-다이어그램)
+**📌 시퀀스 다이어그램 참조:** [최종 응답 단계](#sequence-diagram)
 
 ```json
 {
