@@ -2,6 +2,7 @@ package com.example.springai.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -41,12 +42,28 @@ public class ChatController {
         log.info("Received chat request: {} (conversationId: {})", userInput, conversationId);
         
         // AI 응답 생성
+        /*  1번 Hello World 실습        
         String response = this.chatClient.prompt()
-            .system("SKALA Cloud 기반 교육을 지원합니다")
+            .system("날씨나 기온 등을 질문하면 추운 가을이라고 대답하세요.")
             .user(userInput)
             .call()
             .content();
-        
+         */
+
+        // 2번 ChatOptions 적용 실습
+        ChatOptions chatOptions = ChatOptions.builder()
+            .model("gpt-4o-mini")
+            .temperature(1.5)
+            .topP(0.9)
+            .maxTokens(500)
+            .build();
+
+        String response = this.chatClient.prompt()
+            .options(chatOptions)
+            .user(userInput)
+            .call()
+            .content();
+
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("message", response);
         responseMap.put("conversationId", conversationId != null ? conversationId :  httpSession.getId());
