@@ -1,6 +1,14 @@
 // 전역 변수
 let conversationId = null;
 let isTyping = false;
+let apiPath = '/api/chat'; // 기본 API 경로
+
+// URL 파라미터에서 API 경로 가져오기
+const urlParams = new URLSearchParams(window.location.search);
+const pathParam = urlParams.get('path');
+if (pathParam) {
+    apiPath = pathParam;
+}
 
 // DOM 요소
 const chatForm = document.getElementById('chatForm');
@@ -31,6 +39,19 @@ function initializeEventListeners() {
             handleSubmit(e);
         }
     });
+    
+    // Path Selector 이벤트 (home.html에서 사용)
+    const pathSelector = document.getElementById('pathSelector');
+    if (pathSelector) {
+        // URL 파라미터로 초기값 설정
+        pathSelector.value = apiPath;
+        
+        // 선택 변경 시 API Path 업데이트
+        pathSelector.addEventListener('change', function() {
+            apiPath = this.value;
+            console.log('API Path 변경됨:', apiPath);
+        });
+    }
     
     settingsBtn.addEventListener('click', () => {
         settingsModal.style.display = 'block';
@@ -94,7 +115,7 @@ async function handleSubmit(e) {
     sendBtn.disabled = true;
     
     try {
-        const response = await fetch('/api/chat', {
+        const response = await fetch(apiPath, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

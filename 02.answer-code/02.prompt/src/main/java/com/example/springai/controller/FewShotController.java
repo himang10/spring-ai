@@ -5,26 +5,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.springai.service.ChatService;
+import com.example.springai.service.FewShotService;
 
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * Few-Shot Learning 기반 감성 분석 API를 제공하는 컨트롤러
+ */
 @Slf4j
 @Controller
-@RequestMapping("/api")
-public class ChatController {
+@RequestMapping("/few-shot")
+public class FewShotController {
     
-    private final ChatService chatService;
+    private final FewShotService fewShotService;
 
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
+    public FewShotController(FewShotService fewShotService) {
+        this.fewShotService = fewShotService;
     }
     
     /**
-     * 채팅 메시지 처리
+     * Few-Shot 감성 분석 메시지 처리
      */
     @PostMapping("/chat")
     @ResponseBody
@@ -32,11 +35,11 @@ public class ChatController {
         String userInput = request.get("message");
         String conversationId = request.get("conversationId");
         
-        log.info("Received chat request: {} (conversationId: {})", userInput, conversationId);
+        log.info("Received Few-Shot sentiment analysis request: {} (conversationId: {})", userInput, conversationId);
         log.info("=".repeat(80));
         
-        // ChatService를 통해 메시지 처리
-        String response = chatService.processChat(userInput);
+        // FewShotService를 통해 감성 분석 처리
+        String response = fewShotService.processChat(userInput);
         
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("message", response);
@@ -44,16 +47,4 @@ public class ChatController {
         
         return ResponseEntity.ok(responseMap);
     }
-    
-    /**
-     * 새 대화 시작
-     */
-    @PostMapping("/chat/new")
-    @ResponseBody
-    public ResponseEntity<String> newConversation() {
-        String conversationId = java.util.UUID.randomUUID().toString();
-        log.info("Created new conversation: {}", conversationId);
-        return ResponseEntity.ok(conversationId);
-    }
-
 }

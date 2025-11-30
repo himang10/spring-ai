@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.springai.service.ChatService;
+import com.example.springai.service.ChainOfThoughtService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -14,37 +14,36 @@ import java.util.HashMap;
 
 @Slf4j
 @Controller
-@RequestMapping("/api")
-public class ChatController {
+@RequestMapping("/cot")
+public class ChainOfThoughtController {
     
-    private final ChatService chatService;
+    private final ChainOfThoughtService chainOfThoughtService;
 
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
+    public ChainOfThoughtController(ChainOfThoughtService chainOfThoughtService) {
+        this.chainOfThoughtService = chainOfThoughtService;
     }
-    
+
     /**
-     * 채팅 메시지 처리
+     * PromptTemplate을 사용한 채팅 메시지 처리
      */
     @PostMapping("/chat")
     @ResponseBody
-    public ResponseEntity<Map<String, String>> chat(@RequestBody Map<String, String> request, HttpSession httpSession) {
+    public ResponseEntity<Map<String, String>> chatPt(@RequestBody Map<String, String> request, HttpSession httpSession) {
         String userInput = request.get("message");
         String conversationId = request.get("conversationId");
         
-        log.info("Received chat request: {} (conversationId: {})", userInput, conversationId);
+        log.info("Received chat request with template: {} (conversationId: {})", userInput, conversationId);
         log.info("=".repeat(80));
         
-        // ChatService를 통해 메시지 처리
-        String response = chatService.processChat(userInput);
-        
+        // ChainOfThoughtService를 통해 메시지 처리
+        String response = chainOfThoughtService.processChat(userInput);
+
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("message", response);
         responseMap.put("conversationId", conversationId != null ? conversationId : httpSession.getId());
         
         return ResponseEntity.ok(responseMap);
     }
-    
     /**
      * 새 대화 시작
      */

@@ -5,26 +5,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.springai.service.ChatService;
+import com.example.springai.service.ReActService;
 
 import jakarta.servlet.http.HttpSession;
 
 import java.util.Map;
 import java.util.HashMap;
 
+/**
+ * ReAct (Reasoning and Acting) 기반 채팅 API를 제공하는 컨트롤러
+ */
 @Slf4j
 @Controller
-@RequestMapping("/api")
-public class ChatController {
+@RequestMapping("/react")
+public class ReActController {
     
-    private final ChatService chatService;
+    private final ReActService reActService;
 
-    public ChatController(ChatService chatService) {
-        this.chatService = chatService;
+    public ReActController(ReActService reActService) {
+        this.reActService = reActService;
     }
     
     /**
-     * 채팅 메시지 처리
+     * ReAct 프롬프팅 메시지 처리
      */
     @PostMapping("/chat")
     @ResponseBody
@@ -32,11 +35,11 @@ public class ChatController {
         String userInput = request.get("message");
         String conversationId = request.get("conversationId");
         
-        log.info("Received chat request: {} (conversationId: {})", userInput, conversationId);
+        log.info("Received ReAct request: {} (conversationId: {})", userInput, conversationId);
         log.info("=".repeat(80));
         
-        // ChatService를 통해 메시지 처리
-        String response = chatService.processChat(userInput);
+        // ReActService를 통해 메시지 처리
+        String response = reActService.processChat(userInput);
         
         Map<String, String> responseMap = new HashMap<>();
         responseMap.put("message", response);
@@ -44,16 +47,4 @@ public class ChatController {
         
         return ResponseEntity.ok(responseMap);
     }
-    
-    /**
-     * 새 대화 시작
-     */
-    @PostMapping("/chat/new")
-    @ResponseBody
-    public ResponseEntity<String> newConversation() {
-        String conversationId = java.util.UUID.randomUUID().toString();
-        log.info("Created new conversation: {}", conversationId);
-        return ResponseEntity.ok(conversationId);
-    }
-
 }
