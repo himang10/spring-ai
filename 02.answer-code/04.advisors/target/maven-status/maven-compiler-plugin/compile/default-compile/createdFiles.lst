@@ -1,4 +1,5 @@
 com/example/springai/advisor/AdvisorB.class
+com/example/springai/service/MaxCharLengthService.class
 com/example/springai/advisor/SimpleLoggingAdvisor.class
 com/example/springai/config/ChatClientConfig.class
 com/example/springai/service/AdvisorService.class

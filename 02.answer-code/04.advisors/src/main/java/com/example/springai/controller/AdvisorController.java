@@ -2,6 +2,7 @@ package com.example.springai.controller;
 
 import com.example.springai.service.AdvisorService;
 import com.example.springai.service.BasicService;
+import com.example.springai.service.MaxCharLengthService;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -20,10 +21,13 @@ public class AdvisorController {
 
     private final BasicService basicService;
     private final AdvisorService advisorService;
+    private final MaxCharLengthService maxCharLengthService;
 
-    public AdvisorController(BasicService basicService, AdvisorService advisorService) {
+    public AdvisorController(BasicService basicService, AdvisorService advisorService, 
+                           MaxCharLengthService maxCharLengthService) {
         this.basicService = basicService;
         this.advisorService = advisorService;
+        this.maxCharLengthService = maxCharLengthService;
     }
 
     /**
@@ -63,6 +67,20 @@ public class AdvisorController {
     public Map<String, String> chatWithJsonLogging(@RequestBody Map<String, String> request) {
         String message = request.get("message");
         String response = advisorService.callWithJsonLogging(message);
+        return Map.of("message", response);
+    }
+
+    /**
+     * MaxCharLengthAdvisor를 사용하여 LLM을 호출합니다.
+     * 응답 길이를 100자로 제한합니다.
+     * 
+     * @param request 사용자 메시지를 포함한 요청 맵
+     * @return AI 응답을 포함한 맵
+     */
+    @PostMapping("/maxchar")
+    public Map<String, String> chatWithMaxCharLength(@RequestBody Map<String, String> request) {
+        String message = request.get("message");
+        String response = maxCharLengthService.advisorContext(message);
         return Map.of("message", response);
     }
 }

@@ -42,8 +42,9 @@ function initializeEventListeners() {
         
         // Path별 placeholder 매핑
         const placeholderMap = {
-            '/chat/simple': '대한민국의 수도는 어디인가요?',
-            '/chat/json': '톰 행크스가 출연한 영화 5개를 알려주세요.'
+            '/chat/simple': '인공지능의 미래에 대해 설명해 주세요.',
+            '/chat/json': '톰 행크스가 출연한 영화 5개를 알려주세요.',
+            '/chat/maxchar': '인공지능의 미래에 대해 설명해 주세요.'
         };
         
         // 선택 변경 시 API Path 및 placeholder 업데이트
