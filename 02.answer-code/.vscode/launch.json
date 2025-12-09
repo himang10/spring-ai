@@ -1,0 +1,197 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "appendix-chat-model-api-ollama"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(1)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "appendix-chat-model-api-vertex-ai-gemini"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch1)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch01-spring-ai-project"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch2)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch02-chat-model-api"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch3)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch03-prompt"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch4)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch04-structured-output"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch5)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch05-voice-chat"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch6)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch06-vision-image-generation"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch7-2-react)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch07-advisor-reactive"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch7-1)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch07-advisor"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch8)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch08-embedding-vector-store"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch9-cas)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch09-cassandra-chat-memory"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch9-in-memory)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch09-in-memory-chat-memory"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch9-jdbc)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch09-jdbc-chat-memory"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch9-vector-store)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch09-vector-store-chat-memory"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch10)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch10-rag"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch11)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch11-tool-calling"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-sse-webflux-application)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-sse-webflux-application"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-sse-webflux)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-sse-webflux"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-sse-webmvc-application)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-sse-webmvc-application"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-sse-webmvc)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-sse-webmvc"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-stdio-application)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-stdio-application"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-stdio-boombarrier)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-stdio-boombarrier"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-stdio-datetime)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-stdio-datetime"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-stdio-filesystem)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-stdio-filesystem"
+        },
+        {
+            "type": "java",
+            "name": "DemoApplication(ch12-mcp-server-stdio-internetsearch)",
+            "request": "launch",
+            "mainClass": "com.example.demo.DemoApplication",
+            "projectName": "ch12-mcp-server-stdio-internetsearch"
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/MyFirstSpringAiApplication.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/advisor/AdvisorA.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/advisor/AdvisorB.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/advisor/AdvisorC.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/advisor/JsonLoggingAdvisor.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/advisor/MaxCharLengthAdvisor.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/advisor/SimpleLoggingAdvisor.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/config/ChatClientConfig.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/controller/AdvisorController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/controller/HomeController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/service/AdvisorService.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.advisors/src/main/java/com/example/springai/service/BasicService.java

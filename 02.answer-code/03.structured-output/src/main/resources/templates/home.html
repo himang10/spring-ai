@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring AI Chat</title>
+    <link rel="stylesheet" th:href="@{/css/chat.css}">
+    <style>
+        .path-selector-area {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .path-selector-area label {
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .path-selector-area select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .path-selector-area select:hover {
+            background: white;
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .path-selector-area select:focus {
+            outline: none;
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+        }
+        
+        .chat-container {
+            border-radius: 0 0 10px 10px;
+        }
+        
+        .chat-header {
+            border-radius: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <!-- Path 선택 영역 -->
+        <div class="path-selector-area">
+            <label for="pathSelector">🔀 서비스 선택:</label>
+            <select id="pathSelector">
+                <option value="/chat/bean">🎬 Bean Output (단일 배우)</option>
+                <option value="/chat/list-bean">🎬 Bean Output (여러 배우)</option>
+                <option value="/chat/map">🗺️ Map Output</option>
+                <option value="/chat/list">📝 List Output</option>
+            </select>
+        </div>
+        
+        <!-- 헤더 -->
+        <div class="chat-header">
+            <h1>Spring AI Chat</h1>
+            <div class="header-buttons">
+                <button id="newChatBtn" class="btn-icon" title="새 대화">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </button>
+                <button id="settingsBtn" class="btn-icon" title="설정">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 1v6m0 6v6m5.657-14.657l-4.243 4.243m-2.828 2.828l-4.243 4.243m14.142 0l-4.243-4.243m-2.828-2.828l-4.243-4.243"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 메시지 영역 -->
+        <div class="messages" id="messages">
+            <div class="welcome-message">
+                <h2>👋 안녕하세요!</h2>
+                <p>무엇을 도와드릴까요?</p>
+            </div>
+        </div>
+        
+        <!-- 입력 영역 -->
+        <div class="input-area">
+            <form id="chatForm">
+                <textarea 
+                    id="messageInput" 
+                    placeholder="메시지를 입력하세요..." 
+                    rows="1"
+                    autocomplete="off"
+                >List five ice cream flavors</textarea>
+                <button type="submit" id="sendBtn" class="send-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- 설정 모달 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>설정</h2>
+                <button class="close-btn" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="upload-section">
+                    <h3>문서 업로드</h3>
+                    <p class="help-text">PDF 또는 텍스트 파일을 업로드하여 AI와 대화할 수 있습니다.</p>
+                    <div class="upload-area" id="uploadArea">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+                        </svg>
+                        <p>파일을 드래그하거나 클릭하여 업로드</p>
+                        <p class="file-types">지원 형식: PDF, TXT</p>
+                        <input type="file" id="fileInput" accept=".pdf,.txt" hidden>
+                    </div>
+                    <div id="uploadStatus" class="upload-status"></div>
+                    <div id="uploadedFiles" class="uploaded-files"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script th:src="@{/js/chat.js}"></script>
+</body>
+</html>

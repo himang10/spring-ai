@@ -1,0 +1,330 @@
+// 전역 변수
+let conversationId = null;
+let isTyping = false;
+let apiPath = '/api/chat'; // 기본 API 경로
+
+// URL 파라미터에서 API 경로 가져오기
+const urlParams = new URLSearchParams(window.location.search);
+const pathParam = urlParams.get('path');
+if (pathParam) {
+    apiPath = pathParam;
+}
+
+// DOM 요소
+const chatForm = document.getElementById('chatForm');
+const messageInput = document.getElementById('messageInput');
+const messagesContainer = document.getElementById('messages');
+const sendBtn = document.getElementById('sendBtn');
+const settingsBtn = document.getElementById('settingsBtn');
+const newChatBtn = document.getElementById('newChatBtn');
+const settingsModal = document.getElementById('settingsModal');
+const closeModal = document.getElementById('closeModal');
+const uploadArea = document.getElementById('uploadArea');
+const fileInput = document.getElementById('fileInput');
+const uploadStatus = document.getElementById('uploadStatus');
+
+// 초기화
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEventListeners();
+    adjustTextareaHeight();
+});
+
+// 이벤트 리스너 초기화
+function initializeEventListeners() {
+    chatForm.addEventListener('submit', handleSubmit);
+    messageInput.addEventListener('input', adjustTextareaHeight);
+    messageInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
+            e.preventDefault();
+            handleSubmit(e);
+        }
+    });
+    
+    // Path Selector 이벤트 (home.html에서 사용)
+    const pathSelector = document.getElementById('pathSelector');
+    if (pathSelector) {
+        // URL 파라미터로 초기값 설정
+        pathSelector.value = apiPath;
+        
+        // Path별 placeholder 매핑 (home.html.bk 참조)
+        const placeholderMap = {
+            '/chat/bean': '톰 행크스',
+            '/chat/list-bean': '톰 행크스와 빌 머레이',
+            '/chat/map': '1부터 9까지의 숫자 배열을 \'numbers\'라는 키 이름으로',
+            '/chat/list': '아이스크림 맛'
+        };
+        
+        // 선택 변경 시 API Path 및 placeholder 업데이트
+        pathSelector.addEventListener('change', function() {
+            apiPath = this.value;
+            console.log('API Path 변경됨:', apiPath);
+            
+            // placeholder와 값 업데이트
+            if (placeholderMap[apiPath]) {
+                messageInput.value = placeholderMap[apiPath];
+                messageInput.placeholder = placeholderMap[apiPath];
+            }
+        });
+    }
+    
+    settingsBtn.addEventListener('click', () => {
+        settingsModal.style.display = 'block';
+    });
+    
+    closeModal.addEventListener('click', () => {
+        settingsModal.style.display = 'none';
+    });
+    
+    window.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.style.display = 'none';
+        }
+    });
+    
+    newChatBtn.addEventListener('click', startNewConversation);
+    
+    uploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+    
+    fileInput.addEventListener('change', handleFileUpload);
+    
+    uploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--primary-color)';
+    });
+    
+    uploadArea.addEventListener('dragleave', () => {
+        uploadArea.style.borderColor = 'var(--border-color)';
+    });
+    
+    uploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        uploadArea.style.borderColor = 'var(--border-color)';
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            handleFile(files[0]);
+        }
+    });
+}
+
+// 메시지 전송 처리
+async function handleSubmit(e) {
+    e.preventDefault();
+    
+    const message = messageInput.value.trim();
+    if (!message || isTyping) return;
+    
+    const welcomeMessage = document.querySelector('.welcome-message');
+    if (welcomeMessage) {
+        welcomeMessage.remove();
+    }
+    
+    appendMessage(message, 'user');
+    messageInput.value = '';
+    adjustTextareaHeight();
+    
+    showTypingIndicator();
+    isTyping = true;
+    sendBtn.disabled = true;
+    
+    try {
+        const response = await fetch(apiPath, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                conversationId: conversationId
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('서버 오류가 발생했습니다.');
+        }
+        
+        const data = await response.json();
+        conversationId = data.conversationId;
+        hideTypingIndicator();
+        
+        // 응답 데이터 포맷팅
+        let formattedMessage;
+        if (Array.isArray(data)) {
+            // 배열 응답 체크
+            if (data.length > 0 && data[0].actor && data[0].movies) {
+                // List<ActorsFilms> 응답
+                formattedMessage = data.map((actorFilm, index) => 
+                    `🎬 배우 ${index + 1}: ${actorFilm.actor}\n영화 목록:\n${actorFilm.movies.map((movie, idx) => `  ${idx + 1}. ${movie}`).join('\n')}`
+                ).join('\n\n');
+            } else {
+                // List<String> 응답
+                formattedMessage = `📝 목록 (총 ${data.length}개):\n\n${data.map((item, idx) => `${idx + 1}. ${item}`).join('\n')}`;
+            }
+        } else if (data.actor && data.movies) {
+            // 단일 Bean 응답 (ActorsFilms)
+            formattedMessage = `🎬 배우: ${data.actor}\n\n영화 목록:\n${data.movies.map((movie, idx) => `${idx + 1}. ${movie}`).join('\n')}`;
+        } else if (data.message) {
+            // 일반 메시지 응답
+            formattedMessage = data.message;
+        } else {
+            // JSON 전체 표시
+            formattedMessage = JSON.stringify(data, null, 2);
+        }
+        
+        appendMessage(formattedMessage, 'assistant');
+        
+    } catch (error) {
+        console.error('Error:', error);
+        hideTypingIndicator();
+        appendMessage('죄송합니다. 오류가 발생했습니다. 다시 시도해주세요.', 'assistant');
+    } finally {
+        isTyping = false;
+        sendBtn.disabled = false;
+        messageInput.focus();
+    }
+}
+
+// 메시지 추가
+function appendMessage(content, role) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${role}`;
+    
+    const avatar = document.createElement('div');
+    avatar.className = 'message-avatar';
+    avatar.textContent = role === 'user' ? '👤' : '🤖';
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+    
+    // 줄바꿈 처리
+    if (content.includes('\n')) {
+        contentDiv.style.whiteSpace = 'pre-wrap';
+    }
+    contentDiv.textContent = content;
+    
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(contentDiv);
+    
+    messagesContainer.appendChild(messageDiv);
+    scrollToBottom();
+}
+
+// 타이핑 인디케이터 표시
+function showTypingIndicator() {
+    const indicator = document.createElement('div');
+    indicator.id = 'typingIndicator';
+    indicator.className = 'message assistant';
+    indicator.innerHTML = `
+        <div class="message-avatar">🤖</div>
+        <div class="typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    `;
+    messagesContainer.appendChild(indicator);
+    scrollToBottom();
+}
+
+// 타이핑 인디케이터 제거
+function hideTypingIndicator() {
+    const indicator = document.getElementById('typingIndicator');
+    if (indicator) {
+        indicator.remove();
+    }
+}
+
+// 스크롤을 맨 아래로
+function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// textarea 높이 자동 조절
+function adjustTextareaHeight() {
+    messageInput.style.height = 'auto';
+    messageInput.style.height = Math.min(messageInput.scrollHeight, 200) + 'px';
+}
+
+// 새 대화 시작
+async function startNewConversation() {
+    if (confirm('새 대화를 시작하시겠습니까? 현재 대화 내용이 초기화됩니다.')) {
+        try {
+            const response = await fetch('/api/chat/new', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                conversationId = await response.text();
+                messagesContainer.innerHTML = `
+                    <div class="welcome-message">
+                        <h2>👋 안녕하세요!</h2>
+                        <p>무엇을 도와드릴까요?</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('Error starting new conversation:', error);
+            alert('새 대화를 시작하는 중 오류가 발생했습니다.');
+        }
+    }
+}
+
+// 파일 업로드 처리
+function handleFileUpload(e) {
+    const file = e.target.files[0];
+    if (file) {
+        handleFile(file);
+    }
+}
+
+// 파일 처리
+async function handleFile(file) {
+    const allowedTypes = ['application/pdf', 'text/plain'];
+    if (!allowedTypes.includes(file.type)) {
+        showUploadStatus('지원하지 않는 파일 형식입니다. PDF 또는 TXT 파일만 업로드 가능합니다.', 'error');
+        return;
+    }
+    
+    if (file.size > 10 * 1024 * 1024) {
+        showUploadStatus('파일 크기가 너무 큽니다. 10MB 이하의 파일만 업로드 가능합니다.', 'error');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+        showUploadStatus('파일 업로드 중...', 'info');
+        
+        const response = await fetch('/api/settings/upload', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.status === 'success') {
+            showUploadStatus(data.message, 'success');
+            console.log('File uploaded:', data);
+        } else {
+            showUploadStatus(data.message || '파일 업로드에 실패했습니다.', 'error');
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        showUploadStatus('파일 업로드 중 오류가 발생했습니다.', 'error');
+    }
+}
+
+// 업로드 상태 표시
+function showUploadStatus(message, type) {
+    uploadStatus.textContent = message;
+    uploadStatus.className = `upload-status ${type}`;
+    uploadStatus.style.display = 'block';
+    
+    if (type === 'success' || type === 'error') {
+        setTimeout(() => {
+            uploadStatus.style.display = 'none';
+        }, 5000);
+    }
+}
