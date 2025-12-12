@@ -21,6 +21,13 @@ public class AdvisorC implements CallAdvisor {
   @Override
   public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
     System.out.println("[전처리] AdvisorC");
+    
+    // Context에서 모든 데이터 출력
+    System.out.println("  - AdvisorC: Context 내용:");
+    request.context().forEach((key, value) -> {
+      System.out.println("    * " + key + " = " + value);
+    });
+    
     ChatClientResponse advisedResponse = chain.nextCall(request);
     System.out.println("[후처리] AdvisorC");
     return advisedResponse;

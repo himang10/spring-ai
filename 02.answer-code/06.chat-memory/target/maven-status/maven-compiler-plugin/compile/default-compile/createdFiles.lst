@@ -1,0 +1,6 @@
+com/example/springai/controller/InMemoryController.class
+com/example/springai/controller/VectorStoreController.class
+com/example/springai/controller/HomeController.class
+com/example/springai/service/VectorStoreService.class
+com/example/springai/service/InMemoryService.class
+com/example/springai/MyFirstSpringAiApplication.class

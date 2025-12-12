@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.springai.advisor.AdvisorA;
 import com.example.springai.advisor.AdvisorB;
-import com.example.springai.advisor.AdvisorC;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,7 +23,11 @@ public class BasicService {
 
   public String callAdvisor(String question) {
     String response = chatClient.prompt()
-        .advisors(new AdvisorC())
+        .advisors(advisorSpec -> {
+          // 초기 Context 데이터 설정
+          advisorSpec.param("customData", "BasicService에서 설정한 초기값");
+          advisorSpec.param("requestTime", System.currentTimeMillis());
+        })
         .user(question)
         .call()
         .content();

@@ -21,6 +21,15 @@ public class AdvisorA implements CallAdvisor {
   @Override
   public ChatClientResponse adviseCall(ChatClientRequest request, CallAdvisorChain chain) {
     System.out.println("[전처리] AdvisorA");
+    
+    // Context에서 데이터 읽기
+    Object contextValue = request.context().get("customData");
+    if (contextValue != null) {
+      System.out.println("  - AdvisorA: Context에서 읽은 값 = " + contextValue);
+    } else {
+      System.out.println("  - AdvisorA: Context에 데이터 없음");
+    }
+    
     ChatClientResponse response = chain.nextCall(request);
     System.out.println("[후처리] AdvisorA");
     return response;
