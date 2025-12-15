@@ -61,18 +61,13 @@
         <div class="path-selector-area">
             <label for="pathSelector">🔀 RAG 선택:</label>
             <select id="pathSelector">
-                <option value="/chat/json">JSON Reader</option>
-                <option value="/chat/json-etl">JSON Reader (ETL to PGVector)</option>
-                <option value="/chat/txt">Text Reader</option>
-                <option value="/chat/txt-etl">Text Reader (ETL to PGVector)</option>
-                <option value="/chat/html">HTML Reader</option>
-                <option value="/chat/html-etl">HTML Reader (ETL to PGVector)</option>
-                <option value="/chat/pdf">PDF Reader</option>
-                <option value="/chat/pdf-etl">PDF Reader (ETL to PGVector)</option>
-                <option value="/chat/docx">DOCX Reader</option>
-                <option value="/chat/docx-etl">DOCX Reader (ETL to PGVector)</option>
-                <option value="/chat/url">URL Reader</option>
-                <option value="/chat/url-etl">URL Reader (ETL to PGVector)</option>
+                <option value="/chat/qa">Question Answer Advisor</option>
+                <option value="/chat/rag/retrieval">Retrieval RAG</option>
+                <option value="/chat/rag/pre-retrieval">Pre-Retrieval RAG (Rewrite)</option>
+                <option value="/chat/rag/pre-retrieval-compression">Pre-Retrieval RAG (Compression)</option>
+                <option value="/chat/rag/pre-retrieval-advanced">Pre-Retrieval RAG (Composition)</option>
+                <option value="/chat/rag/multi-query-expander">Multi Query Expander RAG</option>
+                <option value="/chat/rag/post-retrieval">Post-Retrieval RAG</option>
             </select>
         </div>
         
@@ -101,10 +96,10 @@
             <form id="chatForm">
                 <textarea 
                     id="messageInput" 
-                    placeholder="파일을 벡터화합니다" 
+                    placeholder="대한민국 헌법 제1조 1항의 내용은 무엇인가요?" 
                     rows="1"
                     autocomplete="off"
-                >파일을 벡터화합니다</textarea>
+                >대한민국 헌법 제1조 1항의 내용은 무엇인가요?</textarea>
                 <button type="submit" id="sendBtn" class="send-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>

@@ -43,7 +43,7 @@ public class DocumentEmbeddingService {
     List<Document> documents = vectorStore.similaritySearch(
         SearchRequest.builder()
             .query(question)
-            .topK(3)
+            .topK(1)
             .build());
     return documents;
   }
@@ -53,7 +53,7 @@ public class DocumentEmbeddingService {
     List<Document> documents = vectorStore.similaritySearch(
         SearchRequest.builder()
             .query(question)
-            .topK(1)
+            .topK(3)
             .similarityThreshold(0.3)
             .filterExpression("category == 'cloud' && year >= 2020")
             .build());
@@ -66,8 +66,8 @@ public class DocumentEmbeddingService {
   }
 
   // 실습 코드 영역 시작
-  public String deleteDocumentForSimilarity(String request) {
-    log.info("deleteDocumentForSimilarity() request: {}", request);
-
-  }
+  //public String deleteDocumentForSimilarity(String request) {
+  //  log.info("deleteDocumentForSimilarity() request: {}", request);
+  //
+  //}
 }

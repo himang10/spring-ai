@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      embedding:
+        options:
+          model: mxbai-embed-large
+    openai:
+      api-key: dummy
+    
+    vectorstore:
+      pgvector:
+        initialize-schema: true

@@ -2,7 +2,7 @@
 let conversationId = null;
 let projectName = 'default-project'; // Vector Store용 프로젝트 이름
 let isTyping = false;
-let apiPath = '/chat/text'; // 기본 API 경로
+let apiPath = '/chat/qa'; // 기본 API 경로
 
 // URL 파라미터에서 API 경로 가져오기
 const urlParams = new URLSearchParams(window.location.search);
@@ -43,19 +43,20 @@ function initializeEventListeners() {
         
         // Path별 placeholder 매핑
         const placeholderMap = {
-            '/chat/json': 'JSON 문서를 로드합니다.',
-            '/chat/json-etl': 'JSON 문서를 ETL 파이프라인으로 PGVector에 저장합니다.',
-            '/chat/txt': 'TXT 문서를 로드합니다.',
-            '/chat/txt-etl': 'TXT 문서를 ETL 파이프라인으로 PGVector에 저장합니다.',
-            '/chat/html': 'HTML 문서를 로드합니다.',
-            '/chat/html-etl': 'HTML 문서를 ETL 파이프라인으로 PGVector에 저장합니다.',
-            '/chat/pdf': 'PDF 문서를 로드합니다.',
-            '/chat/pdf-etl': 'PDF 문서를 ETL 파이프라인으로 PGVector에 저장합니다.',
-            '/chat/docx': 'DOCX 문서를 로드합니다.',
-            '/chat/docx-etl': 'DOCX 문서를 ETL 파이프라인으로 PGVector에 저장합니다.',
-            '/chat/url': 'https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html',
-            '/chat/url-etl': 'https://docs.spring.io/spring-ai/reference/api/mcp/mcp-overview.html'
+            '/chat/qa': '대한민국 헌법 제1조 1항의 내용은 무엇인가요?',
+            '/chat/rag/retrieval': '대한민국 헌법 제1조 2항의 내용은 무엇인가요?',
+            '/chat/rag/pre-retrieval': '국회의원이 하라는 일은 하지 않고, 자기 개인 이익만 챙기고 있고 이게 국회의원이 할일이냐?',
+            '/chat/rag/pre-retrieval-compression': '국회의원이 하라는 일은 하지 않고, 자기 개인 이익만 챙기고 있고 이게 국회의원이 할일이냐?',
+            '/chat/rag/pre-retrieval-advanced': '국회의원이 하라는 일은 하지 않고, 자기 개인 이익만 챙기고 있고 이게 국회의원이 할일이냐?',
+            '/chat/rag/multi-query-expander': '대통령의 임기는 어떻게 되나요?',
+            '/chat/rag/post-retrieval': '국회의 임시회의는 어떤 조건에 개최될수 있나요?'
         };
+
+        // 초기 placeholder 및 입력값 설정
+        if (placeholderMap[apiPath]) {
+            messageInput.placeholder = placeholderMap[apiPath];
+            messageInput.value = placeholderMap[apiPath];
+        }
         
         // 선택 변경 시 API Path 및 placeholder 업데이트
         pathSelector.addEventListener('change', function() {
@@ -111,10 +112,17 @@ async function handleSubmit(e) {
             throw new Error('서버 오류가 발생했습니다.');
         }
         
-        const data = await response.text();
+        const contentType = response.headers.get("content-type");
+        let data;
+        if (contentType && contentType.includes("application/json")) {
+            data = await response.json(); // JSON 객체로 파싱
+        } else {
+            data = await response.text(); // 일반 텍스트
+        }
+
         hideTypingIndicator();
         
-        // 응답은 plain text 형식
+        // 데이터 전달 (객체일 수도 있고 문자열일 수도 있음)
         appendMessage(data, 'assistant');
         
     } catch (error) {
@@ -140,11 +148,27 @@ function appendMessage(content, role) {
     const contentDiv = document.createElement('div');
     contentDiv.className = 'message-content';
     
-    // 줄바꿈 처리
-    if (content.includes('\n')) {
-        contentDiv.style.whiteSpace = 'pre-wrap';
+    // JSON 객체인 경우 Pretty Print 처리
+    if (typeof content === 'object' && content !== null) {
+        const pre = document.createElement('pre');
+        // JSON을 문자열로 변환 (들여쓰기 2칸)
+        pre.textContent = JSON.stringify(content, null, 2);
+        // 스타일 적용 (배경색, 폰트 등은 CSS로 빼는 것이 좋으나 여기서는 인라인으로 예시)
+        pre.style.backgroundColor = '#f5f5f5';
+        pre.style.padding = '10px';
+        pre.style.borderRadius = '5px';
+        pre.style.overflowX = 'auto';
+        pre.style.fontFamily = 'monospace';
+        pre.style.margin = '0';
+        
+        contentDiv.appendChild(pre);
+    } else {
+        // 일반 텍스트 처리
+        if (content.includes('\n')) {
+            contentDiv.style.whiteSpace = 'pre-wrap';
+        }
+        contentDiv.textContent = content;
     }
-    contentDiv.textContent = content;
     
     messageDiv.appendChild(avatar);
     messageDiv.appendChild(contentDiv);

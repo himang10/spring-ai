@@ -43,7 +43,7 @@ public class DocumentEmbeddingService {
     List<Document> documents = vectorStore.similaritySearch(
         SearchRequest.builder()
             .query(question)
-            .topK(3)
+            .topK(1)
             .build());
     return documents;
   }

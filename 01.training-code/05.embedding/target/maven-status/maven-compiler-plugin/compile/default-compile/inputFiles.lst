@@ -1,0 +1,8 @@
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/MyFirstSpringAiApplication.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/config/OllamaPrimaryConfig.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/config/OpenAIPrimaryConfig.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/DocumentEmbeddingController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/HomeController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/TextEmbeddingController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/service/DocumentEmbeddingService.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/service/TextEmbeddingService.java
