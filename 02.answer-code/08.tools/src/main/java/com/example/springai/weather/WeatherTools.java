@@ -16,16 +16,23 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WeatherTools {
 
-    @Value("${weather.api.key}")
-    private String weatherApiKey;
-    @Value("${weather.api.base-url}")
-    private String weatherBaseUrl;
-    @Value("${weather.api.path}")
-    private String weatherApiPath;
-
+    private final String weatherApiKey;
+    private final String weatherApiPath;
     private final WebClient webClient;
 
-    public WeatherTools(WebClient.Builder builder) {
+    public WeatherTools(
+            WebClient.Builder builder,
+            @Value("${weather.api.key}") String weatherApiKey,
+            @Value("${weather.api.base-url}") String weatherBaseUrl,
+            @Value("${weather.api.path}") String weatherApiPath) {
+        
+        this.weatherApiKey = weatherApiKey;
+        this.weatherApiPath = weatherApiPath;
+        
+        log.info("WeatherTools initialized with base URL: {}", weatherBaseUrl);
+        log.info("WeatherTools initialized with API path: {}", weatherApiPath);
+        log.info("WeatherTools initialized with API key: {}", weatherApiKey != null ? "설정됨" : "null");
+        
         this.webClient = builder
                 .baseUrl(weatherBaseUrl)
                 .build();
