@@ -2,6 +2,7 @@ package com.example.springai.weather;
 
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -15,11 +16,18 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class WeatherTools {
 
+    @Value("${weather.api.key}")
+    private String weatherApiKey;
+    @Value("${weather.api.base-url}")
+    private String weatherBaseUrl;
+    @Value("${weather.api.path}")
+    private String weatherApiPath;
+
     private final WebClient webClient;
 
     public WeatherTools(WebClient.Builder builder) {
         this.webClient = builder
-                .baseUrl("https://api.openweathermap.org")
+                .baseUrl(weatherBaseUrl)
                 .build();
     }
 
@@ -38,9 +46,9 @@ public class WeatherTools {
         
         String result = webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/data/2.5/weather")
+                        .path(weatherApiPath)
                         .queryParam("q", city)
-                        .queryParam("appid", "bcd134b86dd0684539967a4208c51b81")
+                        .queryParam("appid", weatherApiKey)
                         .queryParam("units", "metric")
                         .queryParam("lang", "kr")
                         .build())
