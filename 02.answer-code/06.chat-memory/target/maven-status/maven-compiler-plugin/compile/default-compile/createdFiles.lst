@@ -1,3 +1,4 @@
+com/example/springai/service/MultiMessageService.class
 com/example/springai/controller/InMemoryController.class
 com/example/springai/controller/VectorStoreController.class
 com/example/springai/controller/HomeController.class

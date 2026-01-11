@@ -41,8 +41,11 @@ public class ChainOfThoughtService {
             
             2. 사고 과정
             [단계별 추론]
+
+            3. 추론 과정
+            [상세 설명]
             
-            3. 최종 답변
+            4. 최종 답변
             [결론]
             """;
         

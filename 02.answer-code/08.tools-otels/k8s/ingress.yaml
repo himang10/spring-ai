@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  name: spring-ai-tools-ingress
+  namespace: skala-practice
+spec:
+  ingressClassName: public-nginx
+  rules:
+  - host: spring-ai-tools.skala25a.project.skala-ai.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: spring-ai-tools
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - spring-ai-tools.skala25a.project.skala-ai.com
+    secretName: spring-ai-tools-tls-secret

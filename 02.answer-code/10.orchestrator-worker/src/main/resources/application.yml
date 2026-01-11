@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: orchestrator-worker-pattern
+  
+  ai:
+    openai:
+      api-key: ${OPEN_AI_KEY}
+      chat:
+        options:
+          model: gpt-4o
+          temperature: 0.7
+          max-tokens: 2000
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.example.springai: DEBUG
+    org.springframework.ai: DEBUG
