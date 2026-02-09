@@ -29,18 +29,11 @@ public class PromptTemplateController {
     @PostMapping("/chat")
     @ResponseBody
     public ResponseEntity<Map<String, String>> chatPt(@RequestBody Map<String, String> request, HttpSession httpSession) {
-        String userInput = request.get("message");
-        String conversationId = request.get("conversationId");
-        
-        log.info("Received chat request with template: {} (conversationId: {})", userInput, conversationId);
-        log.info("=".repeat(80));
-        
-        // PromptTemplateService를 통해 메시지 처리
-        String response = promptTemplateService.processChat(userInput);
 
         Map<String, String> responseMap = new HashMap<>();
-        responseMap.put("message", response);
-        responseMap.put("conversationId", conversationId != null ? conversationId : httpSession.getId());
+        /**
+         * Code 추가
+         */
         
         return ResponseEntity.ok(responseMap);
     }

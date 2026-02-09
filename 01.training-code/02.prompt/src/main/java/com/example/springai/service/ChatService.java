@@ -57,7 +57,7 @@ public class ChatService {
         // ChatOptions 설정
         ChatOptions chatOptions = ChatOptions.builder()
             .model("gpt-4o-mini")
-            .temperature(1.5)
+            .temperature(0.7)  // 0.0~1.0 권장 범위로 조정 (1.5 -> 0.7)
             .topP(0.9)
             .maxTokens(500)
             .build();

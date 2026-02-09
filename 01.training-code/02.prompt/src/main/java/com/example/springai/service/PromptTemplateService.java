@@ -43,17 +43,12 @@ public class PromptTemplateService {
         String educationName = "SKAKLA";
         String organizationName = "SK";
         
-        PromptTemplate systemMessageTemplate = new PromptTemplate("""
-            당신의 이름은 {educationName} AI입니다.
-            날씨를 질문하면 항상 추운 여름이라고 대답하세요.
-            {educationName} 관련 단어가 나오면 무조건 짱이라고 대답하세요.
-            {educationName}는 {organizationName}에서 하는 교육 기관입니다.
-            """);
-        
-        String systemContent = systemMessageTemplate.render(Map.of(
-            "educationName", educationName, 
-            "organizationName", organizationName
-        ));
+        /** 
+         * PromptTemplate Code 추가
+         */
+        String systemContent = "";
+
+
         SystemMessage systemMessage = new SystemMessage(systemContent);
         messages.add(systemMessage);
 
@@ -67,21 +62,17 @@ public class PromptTemplateService {
         // ChatOptions 설정
         ChatOptions chatOptions = ChatOptions.builder()
             .model("gpt-4o-mini")
-            .temperature(1.5)
+            .temperature(0.7)
             .topP(0.9)
             .maxTokens(500)
             .build();
 
         // ChatClient에 Prompt의 메시지들과 ChatOptions 전달
-        String response = this.chatClient.prompt()
-            .messages(prompt.getInstructions())
-            .user(u -> u
-                .text("{educationName} 을 항상 답변 마지막에 추가해줘")
-                .param("educationName", educationName)
-            )
-            .options(chatOptions)
-            .call()
-            .content();
+
+        /** 
+         * PromptTemplate Code 추가
+         */
+        String response = "";
         
         log.debug("LLM response received with template");
         return response;
