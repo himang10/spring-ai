@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
+  
+  ai:
+    openai:
+      api-key: ${OPEN_AI_KEY}
+      embedding:
+        options:
+          model: text-embedding-3-small
+          dimensions: 1024  # ollama 임베딩 모델 차원에 맞게 설정 default 1536
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.7
+          max-tokens: 2000
+    
+    vectorstore:
+      pgvector:
+        initialize-schema: true
