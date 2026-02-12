@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: langfuse-config
+  namespace: langfuse
+data:
+  # 애플리케이션 설정
+  NODE_ENV: "production"
+
+  # NextAuth 설정
+  NEXTAUTH_URL: "http://localhost:3000"  # 실제 도메인으로 변경 필요
+
+  # 데이터베이스 연결 설정
+  DATABASE_HOST: "postgres"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "langfuse"
+  DATABASE_USERNAME: "langfuse"
+
+  # Redis 연결 설정
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+
+  # Langfuse 설정
+  LANGFUSE_ENABLE_EXPERIMENTAL_FEATURES: "false"
+  LANGFUSE_LOG_LEVEL: "info"
+
+  # 텔레메트리 설정 (선택사항)
+  TELEMETRY_ENABLED: "true"
+
+  # 이메일 설정 (선택사항, SMTP 사용 시)
+  # EMAIL_FROM_ADDRESS: "noreply@example.com"
+  # SMTP_HOST: "smtp.example.com"
+  # SMTP_PORT: "587"
+  # SMTP_SECURE: "true"
+
+  # S3/객체 스토리지 설정 (선택사항)
+  # S3_ENDPOINT: "s3.amazonaws.com"
+  # S3_REGION: "us-east-1"
+  # S3_BUCKET_NAME: "langfuse-data"
+  # S3_ACCESS_KEY_ID: ""
+  # S3_SECRET_ACCESS_KEY: ""

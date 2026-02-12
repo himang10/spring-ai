@@ -1,0 +1,9 @@
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/MyFirstSpringAiApplication.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/advisor/JsonLoggingAdvisor.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/config/ChatClientConfig.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/controller/HomeController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/controller/OutputConverterController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/model/ActorsFilms.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/service/BeanOutputService.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/service/ListOutputService.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/04.structured-output/src/main/java/com/example/springai/service/MapOutputService.java

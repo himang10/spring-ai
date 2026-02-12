@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-ai-tools
+  namespace: skala-practice
+  labels:
+    app: spring-ai-tools
+    version: v1.0.0
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-ai-tools
+  template:
+    metadata:
+      labels:
+        app: spring-ai-tools
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      containers:
+      - name: spring-ai-tools
+        image: amdp-registry.skala-ai.com/skala25a/spring-ai-tools:1.0.0
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "production"
+        - name: JAVA_OPTS
+          value: "-Xms256m -Xmx512m"
+        # API Keys
+        - name: OPEN_AI_KEY
+          value: "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"
+        - name: WEATHER_API_KEY
+          value: "bcd134b86dd0684539967a4208c51b81"
+        # PostgreSQL Database 설정
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:postgresql://postgres-1-postgresql.postgres:5432/postgres?currentSchema=public"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "postgres"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "Skala25a!23$"
+        # OpenTelemetry Java Agent 설정
+        # 트레이스에서 표시될 서비스 이름
+        - name: OTEL_SERVICE_NAME
+          value: "spring-ai-tools"
+        # Alloy 수집기 엔드포인트
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://grafana-k8s-monitoring-alloy-receiver.observability.svc:4317"
+        # OTLP 전송 프로토콜 (grpc 또는 http/protobuf)
+        - name: OTEL_EXPORTER_OTLP_PROTOCOL
+          value: "grpc"
+        # 트레이스 데이터를 OTLP로 내보내기
+        - name: OTEL_TRACES_EXPORTER
+          value: "otlp"
+        # 메트릭 데이터를 OTLP로 내보내기
+        - name: OTEL_METRICS_EXPORTER
+          value: "otlp"
+        # 로그 데이터를 OTLP로 내보내기
+        - name: OTEL_LOGS_EXPORTER
+          value: "otlp"
+        # 서비스 메타데이터 속성 (Alloy가 k8s.namespace.name을 자동 추가하므로 service.version,environment만 설정)
+        - name: OTEL_RESOURCE_ATTRIBUTES
+          value: "service.version=1.0.0,deployment.environment=production"
+        # 트레이스 샘플링 전략: always_on(100%), always_off(0%), traceidratio(비율기반)
+        - name: OTEL_TRACES_SAMPLER
+          value: "always_on"
+        # 메트릭 전송 주기 (밀리초)
+        - name: OTEL_METRIC_EXPORT_INTERVAL
+          value: "30000"
+        # OpenTelemetry 에이전트 디버그 로그 활성화 여부
+        - name: OTEL_JAVAAGENT_DEBUG
+          value: "false"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/os: linux

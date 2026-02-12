@@ -1,0 +1,7 @@
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/MyFirstSpringAiApplication.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/controller/HomeController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/controller/InMemoryController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/controller/VectorStoreController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/service/InMemoryService.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/service/MultiMessageService.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/02.answer-code/06.chat-memory/src/main/java/com/example/springai/service/VectorStoreService.java

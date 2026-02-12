@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-ai-tools
+  namespace: default
+  labels:
+    app: spring-ai-tools
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spring-ai-tools
+  template:
+    metadata:
+      labels:
+        app: spring-ai-tools
+        version: v1
+    spec:
+      containers:
+      - name: spring-ai
+        image: spring-ai-tools:latest  # 이미지를 빌드하여 레지스트리에 푸시 후 경로 수정
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+
+        # 환경변수 (Secret에서 주입)
+        env:
+        # OpenAI API Key
+        - name: OPEN_AI_KEY
+          valueFrom:
+            secretKeyRef:
+              name: spring-ai-secrets
+              key: OPEN_AI_KEY
+
+        # Weather API Key
+        - name: WEATHER_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: spring-ai-secrets
+              key: WEATHER_API_KEY
+
+        # Langfuse - OpenTelemetry Endpoint
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: spring-ai-secrets
+              key: OTEL_EXPORTER_OTLP_ENDPOINT
+
+        # Langfuse - Authorization Header
+        - name: OTEL_EXPORTER_OTLP_HEADERS
+          valueFrom:
+            secretKeyRef:
+              name: spring-ai-secrets
+              key: OTEL_EXPORTER_OTLP_HEADERS
+
+        # Spring Profile (선택사항)
+        - name: SPRING_PROFILES_ACTIVE
+          value: "prod"
+
+        # JVM 옵션 (선택사항)
+        - name: JAVA_OPTS
+          value: "-Xmx512m -Xms256m"
+
+        # 리소스 제한
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+
+        # Health Check
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+
+        # 시작 프로브 (처음 시작할 때만)
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 0
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 30
+
+      # 보안 컨텍스트
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+
+      # 재시작 정책
+      restartPolicy: Always

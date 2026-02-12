@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: spring-ai-embedding
+  
+  profiles:
+    active: ollama
+  
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-cache: true
+          no-store: true
+          must-revalidate: true
+
+server:
+  port: 8080
+
+logging:
+  level:
+    "[org.springframework.ai]": DEBUG

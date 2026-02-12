@@ -1,8 +1,0 @@
-com/example/springai/config/OllamaPrimaryConfig.class
-com/example/springai/service/DocumentEmbeddingService.class
-com/example/springai/config/OpenAIPrimaryConfig.class
-com/example/springai/controller/TextEmbeddingController.class
-com/example/springai/controller/HomeController.class
-com/example/springai/controller/DocumentEmbeddingController.class
-com/example/springai/MyFirstSpringAiApplication.class
-com/example/springai/service/TextEmbeddingService.class
