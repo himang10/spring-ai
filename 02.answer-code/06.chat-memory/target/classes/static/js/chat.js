@@ -2,7 +2,7 @@
 let conversationId = null;
 let projectName = 'default-project'; // Vector Store용 프로젝트 이름
 let isTyping = false;
-let apiPath = '/chat/in-memory'; // 기본 API 경로
+let apiPath = '/chat/manual-chat-memory'; // 기본 API 경로
 
 // URL 파라미터에서 API 경로 가져오기
 const urlParams = new URLSearchParams(window.location.search);
@@ -43,8 +43,11 @@ function initializeEventListeners() {
         
         // Path별 placeholder 매핑
         const placeholderMap = {
-            '/chat/in-memory': '너의 이름은 SKALA AI 입니다.',
-            '/chat/vector-store': '너의 이름은 SKALA AI 입니다.'
+            '/chat/in-memory': '너는 누구인가',
+            '/chat/message-chat-memory': '너는 누구인가',
+            '/chat/prompt-chat-memory': '너는 누구인가',
+            '/chat/manual-chat-memory': '너는 누구인가',
+            '/chat/vector-store': '너는 누구인가'
         };
         
         // 선택 변경 시 API Path 및 placeholder 업데이트

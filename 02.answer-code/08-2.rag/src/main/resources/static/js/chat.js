@@ -47,16 +47,9 @@ function initializeEventListeners() {
             '/chat/rag/retrieval': '대한민국 헌법 제1조 2항의 내용은 무엇인가요?',
             '/chat/rag/pre-retrieval': '국회의원이 하라는 일은 하지 않고, 자기 개인 이익만 챙기고 있고 이게 국회의원이 할일이냐?',
             '/chat/rag/pre-retrieval-compression': '국회의원이 하라는 일은 하지 않고, 자기 개인 이익만 챙기고 있고 이게 국회의원이 할일이냐?',
-            '/chat/rag/pre-retrieval-advanced': '국회의원이 하라는 일은 하지 않고, 자기 개인 이익만 챙기고 있고 이게 국회의원이 할일이냐?',
             '/chat/rag/multi-query-expander': '대통령의 임기는 어떻게 되나요?',
             '/chat/rag/post-retrieval': '국회의 임시회의는 어떤 조건에 개최될수 있나요?'
         };
-
-        // 초기 placeholder 및 입력값 설정
-        if (placeholderMap[apiPath]) {
-            messageInput.placeholder = placeholderMap[apiPath];
-            messageInput.value = placeholderMap[apiPath];
-        }
         
         // 선택 변경 시 API Path 및 placeholder 업데이트
         pathSelector.addEventListener('change', function() {
