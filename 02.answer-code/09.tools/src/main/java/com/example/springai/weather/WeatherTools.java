@@ -46,8 +46,7 @@ public class WeatherTools {
      */
     @Tool(description = "도시 이름으로 현재 날씨를 조회합니다. 예: Seoul")
     public String getCurrentWeather(
-            @ToolParam(description = "도시 이름 (예: Seoul)", required = true) 
-            String city) {
+            @ToolParam(description = "도시 이름 (예: Seoul)", required = true) String city) {
         
         log.info("날씨 조회 요청 - 도시: {}", city);
         
