@@ -1,7 +1,7 @@
 // 전역 변수
 let conversationId = null;
 let isTyping = false;
-let apiPath = '/chat/simple'; // 기본 API 경로
+let apiPath = '/chat/basic'; // 기본 API 경로
 
 // URL 파라미터에서 API 경로 가져오기
 const urlParams = new URLSearchParams(window.location.search);
@@ -42,6 +42,7 @@ function initializeEventListeners() {
         
         // Path별 placeholder 매핑
         const placeholderMap = {
+            '/chat/basic': '대한민국의 수도는 어디인가요?',
             '/chat/simple': '인공지능의 미래에 대해 설명해 주세요.',
             '/chat/json': '톰 행크스가 출연한 영화 5개를 알려주세요.',
             '/chat/maxchar': '인공지능의 미래에 대해 설명해 주세요.'

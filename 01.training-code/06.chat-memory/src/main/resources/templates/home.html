@@ -59,18 +59,19 @@
     <div class="chat-container">
         <!-- Advisor 선택 영역 -->
         <div class="path-selector-area">
-            <label for="pathSelector">🔀 Advisor 선택:</label>
+            <label for="pathSelector">🔀 Chat Memory 선택:</label>
             <select id="pathSelector">
-                <option value="/chat/basic">Basic Advisor</option>
-                <option value="/chat/simple">Simple Logging Advisor</option>
-                <option value="/chat/maxchar">MaxCharLength Advisor (100자 제한)</option>
-                <option value="/chat/json">JSON Logging Advisor</option>
+                <option value="/chat/manual-chat-memory">Manual Chat Memory</option>
+                <option value="/chat/in-memory">In-Memory Chat Memory(Advisor)</option>
+                <option value="/chat/message-chat-memory">Message Window Chat Memory(Advisor)</option>
+                <option value="/chat/prompt-chat-memory">Prompt Chat Memory(Advisor)</option>
+                <option value="/chat/vector-store">Vector Store Chat Memory(Advisor)</option>
             </select>
         </div>
         
         <!-- 헤더 -->
         <div class="chat-header">
-            <h1>Spring AI Advisors Demo</h1>
+            <h1>Spring AI Chat Memory Demo</h1>
             <div class="header-buttons">
                 <button id="newChatBtn" class="btn-icon" title="새 대화">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -83,8 +84,8 @@
         <!-- 메시지 영역 -->
         <div class="messages" id="messages">
             <div class="welcome-message">
-                <h2>👋 Spring AI Advisors 데모에 오신 것을 환영합니다!</h2>
-                <p>위에서 Advisor를 선택하고 질문을 입력해보세요.</p>
+                <h2>👋 Spring AI Chat Memory 데모에 오신 것을 환영합니다!</h2>
+                <p>위에서 Chat Memory 방식을 선택하고 질문을 입력해보세요.</p>
             </div>
         </div>
         
@@ -93,10 +94,10 @@
             <form id="chatForm">
                 <textarea 
                     id="messageInput" 
-                    placeholder="대한민국의 수도는 어디인가요?" 
+                    placeholder="너의 이름은 SKALA AI 입니다." 
                     rows="1"
                     autocomplete="off"
-                >대한민국의 수도는 어디인가요?</textarea>
+                >너의 이름은 SKALA AI 입니다.</textarea>
                 <button type="submit" id="sendBtn" class="send-btn">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>

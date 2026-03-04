@@ -21,10 +21,10 @@ public class MapOutputService {
      * Map 타입으로 변환
      * 주제에 대한 정보를 Map<String, Object> 형태로 반환
      */
-    public Map<String, Object> getMapResult(String prompt) {
+    public Map<String, Object> getMapResult(String question) {
 
         return chatClient.prompt()
-                .user(prompt)
+                .user(question)
                 .call()
                 .entity(new ParameterizedTypeReference<Map<String, Object>>() {});
     }

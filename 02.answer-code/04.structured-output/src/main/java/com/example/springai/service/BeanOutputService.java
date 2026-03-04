@@ -22,9 +22,9 @@ public class BeanOutputService {
      * 단일 Bean 타입으로 변환
      * 특정 배우의 영화 목록을 ActorsFilms 객체로 반환
      */
-    public ActorsFilms getSingleActorFilms(String prompt) {
+    public ActorsFilms getSingleActorFilms(String question) {
         return chatClient.prompt()
-                .user(prompt)
+                .user(question)
                 .call()
                 .entity(ActorsFilms.class);
     }
@@ -34,9 +34,9 @@ public class BeanOutputService {
      * 여러 배우의 영화 목록을 List<ActorsFilms>로 반환
      * BeanOutputConverter가 List 타입을 처리할 수 있도록 지원
      */
-    public List<ActorsFilms> getMultipleActorsFilms(String prompt) {
+    public List<ActorsFilms> getMultipleActorsFilms(String question) {
         return chatClient.prompt()
-                .user(prompt)
+                .user(question)
                 .call()
                 .entity(new ParameterizedTypeReference<List<ActorsFilms>>() {});
     }

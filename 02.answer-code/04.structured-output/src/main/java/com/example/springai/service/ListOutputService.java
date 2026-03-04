@@ -19,9 +19,9 @@ public class ListOutputService {
      * List 타입으로 변환
      * 주제에 대한 목록을 List<String> 형태로 반환
      */
-    public List<String> getListResult(String prompt) {
+    public List<String> getListResult(String question) {
         return chatClient.prompt()
-                .user(prompt)
+                .user(question)
                 .call()
                 .entity(new ListOutputConverter());
     }

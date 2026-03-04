@@ -1,7 +1,8 @@
 // 전역 변수
 let conversationId = null;
+let projectName = 'default-project'; // Vector Store용 프로젝트 이름
 let isTyping = false;
-let apiPath = '/chat/basic'; // 기본 API 경로
+let apiPath = '/chat/manual-chat-memory'; // 기본 API 경로
 
 // URL 파라미터에서 API 경로 가져오기
 const urlParams = new URLSearchParams(window.location.search);
@@ -42,10 +43,11 @@ function initializeEventListeners() {
         
         // Path별 placeholder 매핑
         const placeholderMap = {
-            '/chat/basic': '대한민국의 수도는 어디인가요?',
-            '/chat/simple': '인공지능의 미래에 대해 설명해 주세요.',
-            '/chat/json': '톰 행크스가 출연한 영화 5개를 알려주세요.',
-            '/chat/maxchar': '인공지능의 미래에 대해 설명해 주세요.'
+            '/chat/in-memory': '너는 누구인가',
+            '/chat/message-chat-memory': '너는 누구인가',
+            '/chat/prompt-chat-memory': '너는 누구인가',
+            '/chat/manual-chat-memory': '너는 누구인가',
+            '/chat/vector-store': '너는 누구인가'
         };
         
         // 선택 변경 시 API Path 및 placeholder 업데이트
@@ -85,33 +87,32 @@ async function handleSubmit(e) {
     sendBtn.disabled = true;
     
     try {
+        // Form data 생성
+        const formData = new URLSearchParams();
+        formData.append('question', message);
+        
+        // Vector Store인 경우 project-name 추가
+        if (apiPath === '/chat/vector-store') {
+            formData.append('project-name', projectName);
+        }
+        
         const response = await fetch(apiPath, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: JSON.stringify({
-                message: message
-            })
+            body: formData.toString()
         });
         
         if (!response.ok) {
             throw new Error('서버 오류가 발생했습니다.');
         }
         
-        const data = await response.json();
+        const data = await response.text();
         hideTypingIndicator();
         
-        // 응답 데이터 포맷팅 (Advisor는 단순 문자열 응답)
-        let formattedMessage;
-        if (data.message) {
-            formattedMessage = data.message;
-        } else {
-            // JSON 전체 표시
-            formattedMessage = JSON.stringify(data, null, 2);
-        }
-        
-        appendMessage(formattedMessage, 'assistant');
+        // 응답은 plain text 형식
+        appendMessage(data, 'assistant');
         
     } catch (error) {
         console.error('Error:', error);
