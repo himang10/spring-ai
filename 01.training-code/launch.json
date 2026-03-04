@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-MyFirstSpringAiApplication",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.example.springai.MyFirstSpringAiApplication",
+      "projectName": "my-first-spring-ai",
+      "args": "",
+      "env": {
+        "OPEN_AI_KEY": ""
+      }
+    }
+  ]
+}
