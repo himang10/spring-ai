@@ -1,0 +1,43 @@
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 15MB
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          no-cache: true
+          no-store: true
+          must-revalidate: true
+  ai:
+    openai:
+      api-key: ${OPEN_AI_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+    mcp:
+      client:
+        type: SYNC
+        # STDIO 로컬 서버
+        stdio:
+          connections:
+            stdio-mcp-server:
+              command: java
+              args:
+                - "-jar"
+                - "../02.myfirst-mcp-server/target/stdio-mcp-server-1.0.0.jar"
+server:
+  port: 8080
+
+logging:
+  pattern:
+    console: '%clr(%-5level){green} %clr(%logger.%M\(\)){cyan}: %msg%n'
+  level:
+    '[io.modelcontextprotocol]': DEBUG
+    '[org.springframework.ai]': DEBUG
+    '[org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor]': DEBUG

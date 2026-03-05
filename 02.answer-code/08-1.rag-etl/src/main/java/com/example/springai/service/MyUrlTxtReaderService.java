@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.document.DocumentTransformer;
 import org.springframework.ai.document.DocumentWriter;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -63,12 +64,12 @@ public class MyUrlTxtReaderService {
 		String text = htmlDoc.text();
 		List<Document> documents = List.of(new Document(text));
 		
-		TokenTextSplitter splitter = new TokenTextSplitter(
+		DocumentTransformer splitter = new TokenTextSplitter(
 			800, 350, 5, 10000, true
 		);
 		
 		// ETL: Extract -> Transform -> Load
-		vectorStore.write(splitter.split(documents));
+		vectorStore.write(splitter.transform(documents));
 		
 		log.info("URL ETL pipeline completed successfully");
 		return documents;
