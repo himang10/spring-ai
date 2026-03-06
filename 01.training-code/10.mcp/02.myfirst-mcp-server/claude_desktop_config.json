@@ -1,11 +1,10 @@
 {
   "mcpServers": {
     "stdio-mcp-server": {
-      "command": "java",
+      "command": "/opt/homebrew/opt/openjdk@21/bin/java",
       "args": [
         "-jar",
-        "/Users/himang10/mydev/skala/skala-cloud/spring-ai-mcp/stdio-mcp-server/target/stdio-mcp-server-1.0.0.jar",
-        "--spring.profiles.active=stdio"
+        "/Users/himang10/mydev/skala/skala-edu/2026-01/workspace/test/spring-ai/02.answer-code/10.mcp/02.myfirst-mcp-server/target/stdio-mcp-server-1.0.0.jar"
       ],
       "env": {
         "JAVA_HOME": "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
