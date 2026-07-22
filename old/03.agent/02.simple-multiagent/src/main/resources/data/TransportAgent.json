@@ -1,0 +1,11 @@
+{
+  "description": "출장 지역까지 이동 가능한 교통편 목록 (가상 데이터, 가격은 편도 기준)",
+  "options": [
+    { "type": "무궁화호", "price": 28000, "duration": "5시간 30분" },
+    { "type": "고속버스", "price": 35000, "duration": "4시간" },
+    { "type": "KTX", "price": 60000, "duration": "2시간 30분" },
+    { "type": "KTX 특실", "price": 85000, "duration": "2시간 30분" },
+    { "type": "비행기", "price": 100000, "duration": "1시간" },
+    { "type": "비행기 비즈니스", "price": 180000, "duration": "1시간" }
+  ]
+}

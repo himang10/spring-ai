@@ -1,0 +1,11 @@
+{
+  "description": "출장 지역의 식당 목록 (가상 데이터, 가격은 1인 기준)",
+  "restaurants": [
+    { "name": "국밥집 한그릇", "type": "한식", "pricePerPerson": 9000, "distanceToOffice": "300m" },
+    { "name": "라멘 이치방", "type": "일식", "pricePerPerson": 12000, "distanceToOffice": "500m" },
+    { "name": "파스타하우스", "type": "양식", "pricePerPerson": 18000, "distanceToOffice": "800m" },
+    { "name": "숯불갈비 명가", "type": "한식(고기)", "pricePerPerson": 28000, "distanceToOffice": "1.5km" },
+    { "name": "회센터 바다", "type": "회/해산물", "pricePerPerson": 35000, "distanceToOffice": "3km" },
+    { "name": "호텔 뷔페 더테이블", "type": "뷔페", "pricePerPerson": 65000, "distanceToOffice": "1km" }
+  ]
+}

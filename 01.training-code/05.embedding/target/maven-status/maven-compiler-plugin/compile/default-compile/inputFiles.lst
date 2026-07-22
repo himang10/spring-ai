@@ -1,0 +1,10 @@
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/HelloAiApplication.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/advisor/AdvisorA.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/advisor/AdvisorB.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/advisor/AdvisorC.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/config/WebConfig.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/ChatController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/EmbeddingController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/HomeController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/controller/OutputConverterController.java
+/Users/himang10/mydev/skala/skala-cloud/spring-ai/01.training-code/05.embedding/src/main/java/com/example/springai/service/EmbeddingService.java

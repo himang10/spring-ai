@@ -1,0 +1,10 @@
+{
+  "description": "출장 지역의 숙소 목록 (가상 데이터)",
+  "hotels": [
+    { "name": "캡슐호텔 E", "pricePerNight": 30000, "distanceToOffice": "2km" },
+    { "name": "게스트하우스 C", "pricePerNight": 50000, "distanceToOffice": "5km" },
+    { "name": "비즈니스호텔 A", "pricePerNight": 80000, "distanceToOffice": "1km" },
+    { "name": "호텔 B", "pricePerNight": 120000, "distanceToOffice": "500m" },
+    { "name": "프리미엄호텔 D", "pricePerNight": 200000, "distanceToOffice": "300m" }
+  ]
+}
