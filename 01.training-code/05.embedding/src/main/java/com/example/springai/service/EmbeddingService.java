@@ -36,13 +36,13 @@ public class EmbeddingService {
     }
 
     /**
-     * 질문과 의미가 가장 비슷한 문서를 최대 3개 찾는다.
+     * 질문과 의미가 가장 비슷한 문서를 최대 5개 찾는다.
      * 질문의 임베딩 생성과 벡터 비교는 VectorStore가 내부에서 처리한다.
      */
     public List<Document> search(String query) {
         SearchRequest request = SearchRequest.builder()
                 .query(query)
-                .topK(3)
+                .topK(5)
                 .build();
 
         return vectorStore.similaritySearch(request);

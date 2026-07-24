@@ -50,7 +50,7 @@ public class EmbeddingService {
         SearchRequest request = SearchRequest.builder()
                 .query(query)
                 .topK(3)
-                .similarityThreshold(0.5)
+                .similarityThreshold(0.4)
                 .build();
 
         return vectorStore.similaritySearch(request);
