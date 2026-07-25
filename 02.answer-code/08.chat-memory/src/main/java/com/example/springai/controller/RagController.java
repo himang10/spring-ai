@@ -33,7 +33,7 @@ public class RagController {
 
     /**
      * 질문을 입력받아 QuestionAnswerAdvisor 기반 RAG 답변을 반환한다.
-     * GET /ai/rag/simple?question=대한민국의 주권은 누구에게 있는가?
+     * GET /ai/rag/qa?question=대한민국의 주권은 누구에게 있는가?
      */
     @GetMapping("/simple")
     public Map<String, Object> questionAnswer(@RequestParam String question) {
@@ -54,6 +54,9 @@ public class RagController {
     /**
      * 질문을 입력받아 RetrievalAugmentationAdvisor 기반 RAG 답변을 반환한다.
      * GET /ai/rag/advanced?question=대한민국의 주권은 누구에게 있는가?
+     * @param question 사용자 질문
+     * @param session HttpSession 객체
+     * @return Map<String, Object> 질문, 대화 ID, 답변을 포함한 Map 객체
      */
     @GetMapping("/advanced")
     public Map<String, Object> advancedQuery(@RequestParam String question,

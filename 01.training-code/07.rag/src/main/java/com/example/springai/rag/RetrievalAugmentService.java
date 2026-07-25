@@ -1,5 +1,7 @@
 package com.example.springai.rag;
 
+import org.apache.juli.logging.Log;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -12,6 +14,7 @@ import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
+
 /**
  * RetrievalAugmentationAdvisor를 이용한 Advanced RAG 초기 구성입니다.
  * 처리 흐름: Pre-Retrieval(Rewrite, Compression, MultiQuery) → Retrieval → Post-Retrieval
@@ -23,6 +26,7 @@ public class RetrievalAugmentService {
 
     public RetrievalAugmentService(ChatModel chatModel, VectorStore vectorStore, ChatMemory chatMemory) {
 
+
         /** 1. ChatClient.Builder 객체 생성
          * ------------------------------------------------------------------
          * RetrievalAugmentationAdvisor에서 사용하기 위한 ChatClient.Builder 객체를 생성
@@ -31,6 +35,10 @@ public class RetrievalAugmentService {
          *    ChatClient의 요청과 응답을 로깅하도록 함
          * ------------------------------------------------------------------
          */
+         ChatClient.Builder transformerBuilder = ChatClient.builder(chatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor());
+
+
 
 
         /** 2. RetrievalAugmentationAdvisor 객체 생성
@@ -51,6 +59,10 @@ public class RetrievalAugmentService {
          * 사용자 질문에 대한 답변을 생성할 때 검색된 문서를 컨텍스트로 활용하도록 함
          * ------------------------------------------------------------------
          */
+         this.chatClient = ChatClient.builder(chatModel)
+                .defaultAdvisors(new SimpleLoggerAdvisor())
+                .build();
+
 
     }
 

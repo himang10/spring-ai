@@ -7,11 +7,14 @@ com/example/springai/rag/QuestionAnswerService.class
 com/example/springai/controller/EmbeddingController.class
 com/example/springai/controller/HomeController.class
 com/example/springai/controller/OutputConverterController$1.class
+com/example/springai/controller/ChatMemoryController.class
 com/example/springai/service/TxtEtlService.class
 com/example/springai/controller/RagEtlController$EtlFile.class
 com/example/springai/controller/ChatController.class
 com/example/springai/advisor/AdvisorB.class
+com/example/springai/chatmemory/MessageChatMemoryService.class
 com/example/springai/service/PdfEtlService.class
+com/example/springai/config/VectorStoreConfig.class
 com/example/springai/controller/OutputConverterController$3.class
 com/example/springai/service/EmbeddingService.class
 com/example/springai/controller/OutputConverterController.class

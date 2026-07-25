@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(./mvnw -q -o compile)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8080/)",
+      "Bash(curl -s \"http://localhost:8080/ai/rag/qa?question=%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%9D%98%20%EC%A3%BC%EA%B6%8C%EC%9D%80%20%EB%88%84%EA%B5%AC%EC%97%90%EA%B2%8C%20%EC%9E%88%EB%8A%94%EA%B0%80%3F\")",
+      "Bash(curl -s \"http://localhost:8080/ai/rag/rewrite?question=%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%9D%98%20%EC%A3%BC%EA%B6%8C%EC%9D%80%20%EB%88%84%EA%B5%AC%EC%97%90%EA%B2%8C%20%EC%9E%88%EB%8A%94%EA%B0%80%3F\")"
+    ]
+  }
+}
