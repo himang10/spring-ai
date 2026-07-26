@@ -1,8 +1,0 @@
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/SimpleAgentApplication.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/agent/HotelAgent.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/agent/RestaurantAgent.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/agent/TransportAgent.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/controller/TripController.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/tool/HotelTool.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/tool/RestaurantTool.java
-/Users/himang10/mydev/skala/skala-cloud/spring-ai/03.agent/01.simple-agent/src/main/java/com/example/simpleagent/tool/TransportTool.java
