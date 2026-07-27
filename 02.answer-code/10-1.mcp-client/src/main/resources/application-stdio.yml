@@ -20,10 +20,10 @@ spring:
               # npx 기반 Docker MCP 서버 (컨테이너/이미지/DB 관리 등 20개 도구 제공)
               # macOS + Docker Desktop 환경: npx가 /opt/homebrew/bin에 있어
               # IDE에서 실행 시 PATH에 없을 수 있으므로 절대 경로로 지정한다.
-              command: /opt/homebrew/bin/npx
+              command: npx
               args:
                 - -y
-                - "@hypnosis/docker-mcp-server"
+                - "@swartdraak/docker-mcp-server@latest"
 
 
 logging:
