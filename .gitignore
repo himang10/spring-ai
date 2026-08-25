@@ -25,3 +25,10 @@ replay_pid*
 
 mvnw.cmd
 pgdata
+
+build/classes
+build/generated
+build/libs
+build/resources
+build/tmp
+build/resolvedMainClassName

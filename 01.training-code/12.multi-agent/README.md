@@ -3,13 +3,13 @@
 ## 목표
 
 `11.simple-agent`에서 만든 "역할 + Tool"로 정의된 Agent 여러 개를, 하나의 Orchestrator가
-상황에 맞게 골라 쓰는 orchestration 기반 Multi-Agent 구조로 확장한다.
+상황에 맞게 골라 쓰는 orchestration 기반 Multi-Agent 구조로 확장해 본다
 
 Multi-Agent는 다음 한 문장으로 이해한다.
 
-> Tool로 Agent를 감싸고 OrcheatratorAgent가 그 Tool을 호출해서 Multi-Agent를 만든다. 
+> **Tool로 Agent를 감싸고 OrcheatratorAgent가 그 Tool을 호출해서 Multi-Agent를 만든다.**
 
-이 코드는 향후 여러분이 직접 자신만의 Multi-Agent를 만들 때 뼈대로 재사용할 Seed Code다.
+이 코드는 향후 여러분이 직접 자신만의 Multi-Agent를 만들 때 뼈대로 재사용할 Seed Code 입니다.
 
 ## 의존성 및 기반 구조
 

@@ -43,17 +43,9 @@ public class FileSystemTool {
     }
 
     /**
-     * 파일과 디렉터리를 쉽게 구분할 수 있는 문자열로 변환합니다.
-     */
-    private String formatDirectoryEntry(Path path) {
-        String type = Files.isDirectory(path) ? "[디렉터리]" : "[파일]";
-        return type + " " + path.getFileName();
-    }
-
-    /**
      * 실행 디렉터리에 새로운 파일을 생성합니다.
      */
-    @Tool(description = "현재 Java 애플리케이션이 실행 중인 디렉터리에 새 파일을 생성합니다.")
+    @Tool(description = "현재 Java 애플리케이션 실행 중인 디렉터리에 새 파일을 생성합니다.")
     public String createFile(
             @ToolParam(description = "생성할 파일명", required = true) String fileName,
             @ToolParam(description = "파일에 저장할 내용", required = true) String content)
@@ -67,7 +59,7 @@ public class FileSystemTool {
                 StandardCharsets.UTF_8,
                 StandardOpenOption.CREATE_NEW);
 
-        return "파일을 생성했습니다: " + filePath;
+        return "파일을 생성했습니다.\n파일 경로: " + filePath + "\n파일 내용:\n" + content;
     }
 
     /**
@@ -93,6 +85,14 @@ public class FileSystemTool {
     }
 
     /**
+     * 파일과 디렉터리를 쉽게 구분할 수 있는 문자열로 변환합니다.
+     */
+    private String formatDirectoryEntry(Path path) {
+        String type = Files.isDirectory(path) ? "[디렉터리]" : "[파일]";
+        return type + " " + path.getFileName();
+    }
+
+    /**
      * 파일명이 실행 디렉터리 밖을 가리키지 않는지 확인합니다.
      */
     private Path resolveFilePath(String fileName) {
@@ -110,3 +110,4 @@ public class FileSystemTool {
         return filePath;
     }
 }
+

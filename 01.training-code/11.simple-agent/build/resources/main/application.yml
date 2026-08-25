@@ -28,6 +28,7 @@ spring:
           temperature: 0.7
     # ------------------------------------------------------------
     # 1) OpenAI (ChatGPT) - 활성화
+    #    spring.ai.model.chat 값을 openai로 변경하세요.
     # ------------------------------------------------------------
     # openai:
     #   api-key: ${OPENAI_API_KEY}
@@ -64,9 +65,16 @@ spring:
     # ollama:
     #   base-url: http://localhost:11434
     #   chat:
-    #     model: deepseek-r1:8b
+    #     model: qwen3:4b-instruct
     #     options:
     #       temperature: 0.7
+
+
+weather:
+  api:
+    key: ${WEATHER_API_KEY}
+    base-url: https://api.openweathermap.org
+    path: /data/2.5/weather
 
 server:
   port: 8080
@@ -74,3 +82,4 @@ server:
 logging:
   level:
     '[org.springframework.ai]': INFO
+    '[org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor]': DEBUG
