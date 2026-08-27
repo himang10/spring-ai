@@ -3,6 +3,7 @@ com/example/springai/controller/OutputConverterController$ActorsFilms.class
 com/example/springai/config/WebConfig.class
 com/example/springai/advisor/AdvisorC.class
 com/example/springai/controller/EmbeddingController.class
+com/example/springai/service/BaaiEtlInitializer.class
 com/example/springai/controller/HomeController.class
 com/example/springai/controller/OutputConverterController$1.class
 com/example/springai/service/TxtEtlService.class
