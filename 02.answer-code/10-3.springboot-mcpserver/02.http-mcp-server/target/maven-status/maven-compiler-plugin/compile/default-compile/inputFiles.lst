@@ -1,0 +1,12 @@
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/HttpMcpServerApplication.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/config/SwaggerConfig.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/controller/ProductController.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/controller/UserController.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/domain/Product.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/domain/User.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/repository/ProductRepository.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/repository/UserRepository.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/service/ProductService.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/service/UserService.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/tool/ProductTools.java
+/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/02.http-mcp-server/src/main/java/com/example/http/tool/UserTools.java

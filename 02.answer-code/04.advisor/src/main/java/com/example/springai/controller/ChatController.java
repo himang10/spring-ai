@@ -3,6 +3,7 @@ package com.example.springai.controller;
 import com.example.springai.advisor.AdvisorA;
 import com.example.springai.advisor.AdvisorB;
 import com.example.springai.advisor.AdvisorC;
+import com.example.springai.advisor.JavaCodeReviewAdvisor;
 import java.util.List;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
@@ -70,6 +71,7 @@ public class ChatController {
                 .advisors(new AdvisorA(), new AdvisorB(), new AdvisorC())
                 .advisors(new SimpleLoggerAdvisor(Ordered.LOWEST_PRECEDENCE))
                 .advisors(safeGuardAdvisor)
+                .advisors(new JavaCodeReviewAdvisor())
                 .call()
                 .content();
     }

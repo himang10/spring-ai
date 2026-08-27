@@ -1,0 +1,11 @@
+com/example/stdio/domain/User.class
+com/example/stdio/service/UserService.class
+com/example/stdio/domain/User$UserBuilder.class
+com/example/stdio/repository/UserRepository.class
+com/example/stdio/tool/ProductTools.class
+com/example/stdio/domain/Product$ProductBuilder.class
+com/example/stdio/tool/UserTools.class
+com/example/stdio/repository/ProductRepository.class
+com/example/stdio/StdioMcpServerApplication.class
+com/example/stdio/service/ProductService.class
+com/example/stdio/domain/Product.class

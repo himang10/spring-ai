@@ -8,5 +8,6 @@ com/example/springai/controller/OutputConverterController.class
 com/example/springai/controller/HomeController.class
 com/example/springai/controller/OutputConverterController$1.class
 com/example/springai/advisor/AdvisorA.class
+com/example/springai/advisor/JavaCodeReviewAdvisor.class
 com/example/springai/HelloAiApplication.class
 com/example/springai/controller/ChatController.class
