@@ -6,7 +6,7 @@
 
 set -e
 
-IMAGE_NAME="ollama-baai-embedding:1.0"
+IMAGE_NAME="skala-registry.skala-ai.com/library/ollama-baai-embedding:1.0"
 CONTAINER_NAME="ollama-baai-embedding"
 HOST_PORT=11436
 

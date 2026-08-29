@@ -9,23 +9,25 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-IMAGE_NAME="${IMAGE_NAME:-ollama-baai-embedding}"
-IMAGE_TAG="${IMAGE_TAG:-1.0}"
+IMAGE_NAME="ollama-baai-embedding"
+IMAGE_TAG="1.0"
+
 # Hugging Face(BAAI/bge-m3)의 GGUF 미러 저장소 F16 파일
-EMBED_MODEL="${EMBED_MODEL:-hf.co/CompendiumLabs/bge-m3-gguf:F16}"
+EMBED_MODEL="hf.co/CompendiumLabs/bge-m3-gguf:F16"
+
 # 애플리케이션에서 사용할 짧은 모델 이름
-EMBED_ALIAS="${EMBED_ALIAS:-bge-m3}"
+EMBED_ALIAS="bge-m3"
 
 echo "이미지(${IMAGE_NAME}:${IMAGE_TAG})를 빌드합니다. (모델: ${EMBED_MODEL} -> ${EMBED_ALIAS})"
 
-docker build \
+docker buildx build \
   --build-arg OLLAMA_MODEL="${EMBED_MODEL}" \
   --build-arg EMBED_ALIAS="${EMBED_ALIAS}" \
+  --platform linux/amd64,linux/arm64 \
   -t "${IMAGE_NAME}:${IMAGE_TAG}" \
-  -f "${SCRIPT_DIR}/Dockerfile" \
-  "${SCRIPT_DIR}"
+  -f "./Dockerfile" \
+  .
 
 echo "이미지 빌드가 완료되었습니다: ${IMAGE_NAME}:${IMAGE_TAG}"
 docker images "${IMAGE_NAME}"

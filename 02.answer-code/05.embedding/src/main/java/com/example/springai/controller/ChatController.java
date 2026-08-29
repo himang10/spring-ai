@@ -38,7 +38,7 @@ public class ChatController {
     private final ChatClient chatClient;
 
     private final SafeGuardAdvisor safeGuardAdvisor = new SafeGuardAdvisor(
-                List.of("욕설", "계좌번호", "폭력", "폭탄", "외설", "소개"),
+                List.of("욕설", "계좌번호", "폭력", "폭탄", "외설"),
                 "해당 질문은 민감한 콘텐츠 요청이므로 응답할 수 없습니다.",
                 Ordered.HIGHEST_PRECEDENCE
             );

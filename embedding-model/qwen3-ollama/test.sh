@@ -4,9 +4,9 @@
 #
 # 사용법:
 #   ./03.test.sh
-#   BASE_URL=http://localhost:11435 EMBED_MODEL=qwen3-embedding ./03.test.sh
+#   BASE_URL=http://localhost:11436 EMBED_MODEL=qwen3-embedding ./test.sh
 
-BASE_URL="${BASE_URL:-http://localhost:11435}"
+BASE_URL="${BASE_URL:-http://localhost:11436}"
 EMBED_MODEL="${EMBED_MODEL:-qwen3-embedding}"
 
 # jq가 있으면 예쁘게 출력하고, 없으면 원본 그대로 출력한다.
