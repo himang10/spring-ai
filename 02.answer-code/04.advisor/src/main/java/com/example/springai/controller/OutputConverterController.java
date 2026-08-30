@@ -3,6 +3,7 @@ package com.example.springai.controller;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.ai.chat.client.ChatClient;
+import com.example.springai.advisor.TokenLatencyProfilerAdvisor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,8 @@ public class OutputConverterController {
 
     // Autoconfigured ChatClient.Builder is injected
     public OutputConverterController(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
+        this.chatClient = chatClientBuilder
+                .build();
     }
     
     /**

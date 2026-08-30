@@ -3,9 +3,9 @@ package com.example.springai.controller;
 import com.example.springai.advisor.AdvisorA;
 import com.example.springai.advisor.AdvisorB;
 import com.example.springai.advisor.AdvisorC;
-import com.example.springai.advisor.JavaCodeReviewAdvisor;
 import java.util.List;
 import org.springframework.ai.chat.client.ChatClient;
+import com.example.springai.advisor.TokenLatencyProfilerAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.ChatOptions;
@@ -39,14 +39,16 @@ public class ChatController {
     private final ChatClient chatClient;
 
     private final SafeGuardAdvisor safeGuardAdvisor = new SafeGuardAdvisor(
-                List.of("욕설", "계좌번호", "폭력", "폭탄", "외설", "소개"),
+                List.of("욕설", "계좌번호", "폭력", "폭탄", "외설"),
                 "해당 질문은 민감한 콘텐츠 요청이므로 응답할 수 없습니다.",
                 Ordered.HIGHEST_PRECEDENCE
             );
 
     // Autoconfigured ChatClient.Builder is injected
     public ChatController(ChatClient.Builder chatClientBuilder) {
-        this.chatClient = chatClientBuilder.build();
+        this.chatClient = chatClientBuilder
+                .defaultAdvisors(new TokenLatencyProfilerAdvisor(100))  
+                .build();
     }
 
     @GetMapping("/ai")
@@ -71,7 +73,6 @@ public class ChatController {
                 .advisors(new AdvisorA(), new AdvisorB(), new AdvisorC())
                 .advisors(new SimpleLoggerAdvisor(Ordered.LOWEST_PRECEDENCE))
                 .advisors(safeGuardAdvisor)
-                .advisors(new JavaCodeReviewAdvisor())
                 .call()
                 .content();
     }

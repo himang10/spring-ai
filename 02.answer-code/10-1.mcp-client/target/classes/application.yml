@@ -29,7 +29,20 @@ spring:
           model: gpt-4o-mini
           temperature: 0.7
 
-
+    mcp:
+      client:
+        # stdio 방식: 클라이언트가 아래 command/args로 docker-mcp-server 프로세스를 직접
+        # 자식 프로세스로 실행하고 표준 입출력(stdin/stdout)으로 통신한다.
+        name: my-spring-ai-mcp-client
+        version: 1.0.0
+        type: SYNC
+        stdio:
+          connections:
+            docker-server:
+              command: npx
+              args:
+                - -y
+                - "@swartdraak/docker-mcp-server@latest"
 
 
 server:

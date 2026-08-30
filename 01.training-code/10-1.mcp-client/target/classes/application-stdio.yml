@@ -16,11 +16,6 @@ spring:
                 - -jar
                 - ../10-2.mcp-server/target/spring-mcp-server-0.0.1-SNAPSHOT.jar
                 - --spring.profiles.active=stdio
-            docker-server:
-              command: npx
-              args:
-                - -y
-                - "@swartdraak/docker-mcp-server@latest"
 
 logging:
   level:
