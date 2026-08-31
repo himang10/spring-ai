@@ -1,9 +1,0 @@
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/StdioMcpServerApplication.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/domain/Product.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/domain/User.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/repository/ProductRepository.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/repository/UserRepository.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/service/ProductService.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/service/UserService.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/tool/ProductTools.java
-/Users/himang10/mydev/skala/skala-cloud/skala-4/spring-ai/02.answer-code/10-3.springboot-mcpserver/01.stdio-mcp-server/src/main/java/com/example/stdio/tool/UserTools.java

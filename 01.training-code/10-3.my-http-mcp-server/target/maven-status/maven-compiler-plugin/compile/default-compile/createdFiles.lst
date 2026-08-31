@@ -1,0 +1,12 @@
+com/example/http/service/UserService.class
+com/example/http/repository/ProductRepository.class
+com/example/http/controller/ProductController.class
+com/example/http/domain/User.class
+com/example/http/HttpMcpServerApplication.class
+com/example/http/service/ProductService.class
+com/example/http/domain/Product.class
+com/example/http/controller/UserController.class
+com/example/http/config/SwaggerConfig.class
+com/example/http/domain/Product$ProductBuilder.class
+com/example/http/domain/User$UserBuilder.class
+com/example/http/repository/UserRepository.class
