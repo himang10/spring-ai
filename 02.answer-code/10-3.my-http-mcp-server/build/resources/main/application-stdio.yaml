@@ -21,6 +21,9 @@ spring:
         type: SYNC
 
 logging:
+  # STDIO 전송은 표준출력(stdout)을 그대로 JSON-RPC 메시지 채널로 사용하므로, 로그가 콘솔에
+  # 한 줄이라도 섞이면 클라이언트가 그 줄을 메시지로 오인해 파싱 에러를 낸다. 별도의
+  # logback-spring.xml 없이 콘솔 임계값만 OFF로 올려 콘솔 출력을 완전히 끈다.
   threshold:
     console: OFF
   file:

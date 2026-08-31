@@ -1,32 +1,33 @@
-# HTTP(Streamable) MCP Server 실습
+# STDIO + HTTP(Streamable) 통합 MCP Server 실습
 
 ## 실습 개요
 
-기존 Spring Boot 기반 API Service(Controller → Service → Repository 구조)에
-**MCP(Model Context Protocol) Tool**을 추가로 노출하는 프로젝트입니다.
+Spring Boot 기반 API Service(Controller → Service → Repository 구조)에
+**MCP(Model Context Protocol) Tool**을 추가로 노출하며, `@RestController`는 삭제하지 않고
+그대로 유지한 채 `tool` 패키지의 `@McpTool` 메서드가 병행 동작합니다.
 
-`01.stdio-mcp-server`와 동일한 User/Product 도메인·구조를 사용하지만, 통신 방식이
-**STDIO(표준 입출력)가 아니라 Streamable HTTP**라는 점이 다릅니다. HTTP 기반이므로
-별도의 웹 서버 비활성화가 필요 없고, 오히려 **기존 REST API(Controller)를 그대로 살려둔 채
-MCP 엔드포인트(`/mcp`)를 추가로 노출**하여 REST API와 MCP Tool을 동시에 서비스할 수 있습니다.
-
-- 통신 방식: Streamable HTTP (HTTP POST/GET 기반, 선택적으로 SSE 스트리밍 지원)
-- 대상 도메인: User, Product
+- 통신 방식(프로필) 3종 — 실행 시 `--spring.profiles.active` 값으로 택일합니다.
+  - `stdio` : 표준 입출력(STDIO) 기반 MCP. 내장 웹 서버(Tomcat)를 아예 띄우지 않습니다.
+  - `stateful-http` : Streamable HTTP, 세션(`MCP-Session-Id`)을 유지합니다.
+  - `stateless-http` : Streamable HTTP, 세션을 유지하지 않습니다(요청마다 독립 처리, 수평 확장에 유리).
+- 대상 도메인: User, Product (Controller/Service/Repository/Tool은 세 프로필 모두 공통으로 재사용)
 - 데이터 저장소: H2 In-Memory Database
-- 프로필: `stateless`(세션 미유지, 기본값) / `streamable`(세션 유지)
+- `application.yaml`에는 기본 활성 프로필이 지정되어 있지 않으므로, 실행할 때 반드시
+  `--spring.profiles.active=stdio|stateful-http|stateless-http` 중 하나를 명시해야 합니다.
 
 ## 실습 목표
 
-기존 Spring Boot 프로젝트(Controller 기반 REST API)에 아래 두 가지를 추가/변경하여
-MCP Server로 전환하는 방법을 이해합니다.
+하나의 Spring Boot 프로젝트에서 **전송 계층(STDIO ↔ Streamable HTTP)만 프로필로 갈아끼우고**,
+나머지 도메인 로직(Controller/Service/Repository/Tool)은 그대로 재사용하는 구조를 이해합니다.
 
 1. **tool 패키지 추가**: 기존 `@RestController`가 처리하던 기능과 동일한 동작을 하는
    `@McpTool` 메서드를 추가 작성 (Controller는 삭제하지 않고 그대로 유지)
-2. **application 설정 추가**: Streamable HTTP 모드로 동작하도록 `spring.ai.mcp.server` 관련
-   설정(`protocol: STREAMABLE` 또는 `STATELESS`, `streamable-http.mcp-endpoint` 등) 추가
+2. **프로필별 application 설정 분리**: 공통 설정(`application.yaml`)과 전송 계층별 설정
+   (`application-stdio.yaml`, `application-stateful-http.yaml`, `application-stateless-http.yaml`)을
+   분리하여, 실행 시 프로필 하나만 바꿔 끼우면 통신 방식이 전환되도록 구성
 
-즉, STDIO 버전이 Controller를 Tool로 **교체**했다면, HTTP 버전은 Controller를 유지한 채
-Tool 계층을 **추가**하여 같은 서비스 로직을 REST API와 MCP Tool 양쪽으로 노출한다는 점이 핵심입니다.
+즉, 별도 프로젝트로 나뉘어 있던 STDIO 버전과 HTTP 버전의 **공통 코드(도메인/Controller/Tool)는
+하나로 합치고, 서로 다른 부분(전송 계층 설정)만 프로필로 분리**한 것이 이번 통합의 핵심입니다.
 
 ## 기술 스택
 
@@ -35,42 +36,42 @@ Tool 계층을 **추가**하여 같은 서비스 로직을 REST API와 MCP Tool 
 | Language | Java 21 |
 | Framework | Spring Boot 4.1.0 |
 | AI Framework | Spring AI 2.0.x (MCP Server) |
-| 통신 프로토콜 | MCP over Streamable HTTP (STATELESS / STREAMABLE) |
+| 통신 프로토콜 | MCP over STDIO / Streamable HTTP (STATEFUL, STATELESS) |
 | Database | H2 (In-Memory) |
 | ORM | Spring Data JPA |
-| API 문서화 | springdoc-openapi (Swagger UI) |
+| API 문서화 | springdoc-openapi (Swagger UI, HTTP 프로필에서만 사용) |
 | 빌드 도구 | Gradle / Maven (둘 다 지원) |
-| 기타 | Lombok |
+| 기타 | Lombok, Spring Boot Actuator |
 
 ## 프로젝트 구조
 
 ```
-02.http-mcp-server
+10-3.my-http-mcp-server
 ├── build.gradle / pom.xml
 ├── claude_desktop_config.json      # Claude Desktop 연동 설정 예시 (mcp-remote 브릿지)
-├── run.sh                          # 프로필 선택 실행 스크립트 (stateless|streamable)
 └── src/main
     ├── java/com/example/http
     │   ├── HttpMcpServerApplication.java
-    │   ├── domain/         # 기존 프로젝트의 Entity 그대로 재사용
+    │   ├── domain/         # User, Product 엔티티 (모든 프로필 공통)
     │   │   ├── User.java
     │   │   └── Product.java
-    │   ├── repository/     # 기존 프로젝트의 Repository 그대로 재사용
+    │   ├── repository/     # Spring Data JPA Repository (모든 프로필 공통)
     │   │   ├── UserRepository.java
     │   │   └── ProductRepository.java
-    │   ├── service/        # 기존 프로젝트의 Service 그대로 재사용
+    │   ├── service/        # 비즈니스 로직 (모든 프로필 공통)
     │   │   ├── UserService.java
     │   │   └── ProductService.java
     │   ├── controller/      # 기존 REST API: 삭제하지 않고 그대로 유지
     │   │   ├── UserController.java
     │   │   └── ProductController.java
-    │   └── tool/            # 신규 추가: REST API와 별개로 MCP Tool 계층 추가
+    │   └── tool/            # REST API와 별개로 노출되는 MCP Tool 계층
     │       ├── UserTools.java
     │       └── ProductTools.java
     └── resources
-        ├── application.yaml            # 코드 변경: 공통 설정(DB, MCP 서버 이름 등)
-        ├── application-streamable.yaml # 신규 추가: Streamable HTTP(세션 유지) 프로필
-        ├── application-stateless.yaml  # 신규 추가: Stateless HTTP(세션 미유지) 프로필
+        ├── application.yaml               # 공통 설정(DB, Actuator, Swagger, 로깅 등)
+        ├── application-stdio.yaml         # stdio 프로필: 웹 서버 비활성화 + STDIO 전송
+        ├── application-stateful-http.yaml # stateful-http 프로필: 세션 유지 Streamable HTTP
+        ├── application-stateless-http.yaml# stateless-http 프로필: 세션 미유지 Streamable HTTP
         └── data.sql
 ```
 
@@ -78,8 +79,8 @@ Tool 계층을 **추가**하여 같은 서비스 로직을 REST API와 MCP Tool 
 
 ### 1. 의존성 추가
 
-`01.stdio-mcp-server`와 **완전히 동일한 의존성**을 사용합니다. STDIO냐 Streamable HTTP냐는
-런타임 설정(`application.yaml`)에서 결정되며, 의존성 자체는 바뀌지 않습니다.
+STDIO와 Streamable HTTP 모두 **동일한 의존성**을 사용합니다. 전송 방식은
+런타임 설정(`application-{profile}.yaml`)에서 결정되며, 의존성 자체는 프로필과 무관하게 하나만 있으면 됩니다.
 
 **Gradle (`build.gradle`)**
 
@@ -93,8 +94,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
-    // MCP Server 의존성 추가 (STDIO와 동일한 starter)
+    // MCP Server 의존성 추가 (STDIO/HTTP 공통 starter)
     implementation 'org.springframework.ai:spring-ai-starter-mcp-server-webmvc'
 }
 
@@ -119,7 +121,7 @@ dependencyManagement {
 </dependencyManagement>
 
 <dependencies>
-    <!-- MCP Server 의존성 추가 (STDIO와 동일한 starter) -->
+    <!-- MCP Server 의존성 추가 (STDIO/HTTP 공통 starter) -->
     <dependency>
         <groupId>org.springframework.ai</groupId>
         <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
@@ -127,14 +129,14 @@ dependencyManagement {
 </dependencies>
 ```
 
-> `spring-ai-starter-mcp-server-webmvc`는 `application.yaml`의 `spring.ai.mcp.server.protocol`
-> 값(`STREAMABLE` / `STATELESS`)에 따라 HTTP 엔드포인트로 MCP를 노출합니다. `stdio: true`를 설정한
-> STDIO 버전과 동일한 의존성으로 두 가지 통신 방식을 모두 지원합니다.
+> `spring-ai-starter-mcp-server-webmvc` 하나로 STDIO와 Streamable HTTP(STATEFUL/STATELESS)를
+> 모두 지원하며, 실제 전송 방식은 활성화된 프로필의 `spring.ai.mcp.server.stdio` /
+> `spring.ai.mcp.server.protocol` 값에 따라 결정됩니다.
 
-### 2. application 설정 추가
+### 2. 프로필별 application 설정 분리
 
-STDIO 버전은 웹 서버를 껐지만, HTTP 버전은 반대로 **웹 서버를 그대로 켜둔 채**
-MCP 프로토콜과 엔드포인트만 지정합니다. 공통 설정과 프로필별 설정을 분리했습니다.
+전송 계층 설정을 **공통 설정(`application.yaml`)** 과 **프로필 전용 설정** 3개 파일로 분리했습니다.
+실행 시 `--spring.profiles.active` 값으로 세 파일 중 하나를 선택해 활성화합니다.
 
 **공통 설정 (`application.yaml`)**
 
@@ -145,72 +147,121 @@ server:
 spring:
   application:
     name: http-mcp-server
-  profiles:
-    active: stateless   # stateless(기본) 또는 streamable
+
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:data.sql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+```
+
+**`stdio` 프로필 (`application-stdio.yaml`, 표준 입출력)**
+
+```yaml
+spring:
+  main:
+    # STDIO는 표준 입출력으로 통신하므로 내장 웹 서버(Tomcat)를 띄우지 않는다.
+    web-application-type: none
+    # 배너를 표준출력(stdout)에 찍으면 JSON-RPC 메시지 스트림에 섞여 클라이언트 파싱 에러가 나므로 끈다.
+    banner-mode: off
 
   ai:
     mcp:
       server:
-        enabled: true          # MCP 서버 활성화
-        name: http-mcp-server
+        name: my-spring-ai-mcp-server
         version: 1.0.0
-        instructions: "HTTP MCP Server providing User and Product management tools"
-        type: SYNC              # 동기 방식
         annotation-scanner:
-          enabled: true         # @McpTool 어노테이션 스캔 활성화
+          enabled: true
+        # protocol 속성은 사용하지 않는다. stdio=true 이면 protocol 설정은 무시된다.
+        stdio: true
+        type: SYNC
+
+logging:
+  # 콘솔에 로그가 한 줄이라도 섞이면 클라이언트가 JSON-RPC 메시지로 오인해 파싱 에러를 낸다.
+  # 별도의 logback-spring.xml 없이 콘솔 임계값만 OFF로 올려 콘솔 출력을 완전히 끈다.
+  threshold:
+    console: OFF
+  file:
+    name: logs/mcp-server-stdio.log
 ```
 
-**Streamable 프로필 (`application-streamable.yaml`, 세션 상태 유지)**
+> 콘솔 출력을 완전히 끄기 위해 커스텀 `logback-spring.xml`을 따로 둘 필요는 없습니다.
+> Spring Boot 기본 로깅 설정은 `logging.file.name`이 지정되면 콘솔/파일 어펜더를 모두 등록하는데,
+> `logging.threshold.console: OFF`를 주면 `ThresholdFilter`가 모든 레벨의 로그를 걸러내어
+> 콘솔 어펜더만 사실상 무음 처리되고 파일 어펜더는 그대로 동작합니다.
+
+**`stateful-http` 프로필 (`application-stateful-http.yaml`, 세션 상태 유지)**
 
 ```yaml
 spring:
-  config:
-    activate:
-      on-profile: streamable
-
   ai:
     mcp:
       server:
-        protocol: STREAMABLE              # Streamable HTTP 프로토콜 활성화
-        resource-change-notification: true
-        tool-change-notification: true
-        prompt-change-notification: true
-        streamable-http:
-          mcp-endpoint: /mcp               # MCP 엔드포인트 경로
-          keep-alive-interval: 30s         # 연결 유지 간격
+        name: my-spring-ai-mcp-server
+        version: 1.0.0
+        annotation-scanner:
+          enabled: true
+        # 세션 상태를 유지하는 Streamable HTTP. 엔드포인트는 기본값 POST /mcp 를 사용한다.
+        protocol: STREAMABLE
+        type: SYNC
 ```
 
-**Stateless 프로필 (`application-stateless.yaml`, 세션 상태 미유지)**
+**`stateless-http` 프로필 (`application-stateless-http.yaml`, 세션 상태 미유지)**
 
 ```yaml
 spring:
-  config:
-    activate:
-      on-profile: stateless
-
   ai:
     mcp:
       server:
-        protocol: STATELESS               # Stateless 프로토콜 활성화
-        resource-change-notification: true
-        tool-change-notification: true
-        prompt-change-notification: true
-        streamable-http:
-          mcp-endpoint: /mcp
-          keep-alive-interval: 30s
+        name: my-spring-ai-mcp-server
+        version: 1.0.0
+        annotation-scanner:
+          enabled: true
+        # 세션 상태를 보관하지 않는 Streamable HTTP. 요청마다 독립적으로 처리되어
+        # 여러 인스턴스로 수평 확장하기 쉽다(클라우드 네이티브 배포에 적합).
+        protocol: STATELESS
+        type: SYNC
 ```
 
-> STDIO 버전에서 필수였던 `web-application-type: none`, `logging.pattern.console` 비활성화는
-> HTTP 버전에서는 **불필요**합니다. HTTP는 별도 포트(`/mcp`)로 통신하므로 콘솔 로그나
-> Swagger UI, Actuator 등 기존 웹 기능과 자유롭게 공존할 수 있습니다.
-> 두 프로필의 차이는 서버가 세션(`MCP-Session-Id`)을 유지하는지 여부이며, `stateless` 서버는
+> `stdio` 프로필에서 설정한 `web-application-type: none`, `banner-mode: off`는
+> `stateful-http`/`stateless-http` 프로필에서는 필요 없습니다. <br>
+> HTTP 프로필은 내장 웹 서버를 그대로 사용하므로 Swagger UI, H2 Console, Actuator 등 기존 웹 기능과 자유롭게 공존합니다. <br>
+> 두 HTTP 프로필의 차이는 서버가 세션(`MCP-Session-Id`)을 유지하는지 여부이며, `STATELESS` 서버는
 > 클라이언트로의 역방향 요청(elicitation, sampling, ping)을 지원하지 않습니다.
 
 ### 3. tool 패키지 추가 (Controller는 유지)
 
-STDIO 버전과 달리 `@RestController`를 **삭제하지 않고 그대로 둔 채**, 동일한 기능을 수행하는
-`@McpTool` 메서드를 `tool` 패키지에 별도로 작성합니다. Service/Repository는 두 계층이
-동일하게 주입받아 재사용합니다.
+프로필과 무관하게 `@RestController`를 **삭제하지 않고 그대로 둔 채**, 동일한 기능을 수행하는
+`@McpTool` 메서드를 `tool` 패키지에 별도로 작성합니다. Service/Repository는 Controller와
+Tool 양쪽 계층에서 동일하게 주입받아 재사용합니다.
 
 | 기존 (REST API, 유지) | 신규 추가 (MCP Tool) |
 |---|---|
@@ -252,85 +303,77 @@ public class ProductTools {
 - 기존 `ProductController`는 그대로 남아 있으므로, 같은 서버가 `/api/products`(REST)와
   `/mcp`(MCP) 양쪽으로 동일한 기능을 제공합니다.
 
-## 정리: 전환 체크리스트
-
-기존 Spring Boot API 프로젝트를 Streamable HTTP MCP Server로 전환할 때 확인할 항목입니다.
-
-- [ ] `spring-ai-bom` dependencyManagement 및 `spring-ai-starter-mcp-server-webmvc` 의존성 추가
-- [ ] `application.yaml`에 `spring.ai.mcp.server.enabled: true`, `annotation-scanner.enabled: true` 추가
-- [ ] 프로필별로 `spring.ai.mcp.server.protocol`(`STREAMABLE`/`STATELESS`)과
-      `streamable-http.mcp-endpoint` 설정 추가
-- [ ] 기존 `@RestController`는 삭제하지 않고 유지 (필요 없다면 STDIO 버전처럼 제거 후 Tool로 대체 가능)
-- [ ] 동일 기능을 수행하는 `@McpTool` 메서드를 `tool` 패키지에 추가 작성
-- [ ] Domain/Repository/Service 계층은 변경 없이 그대로 재사용
 
 ## 빌드 및 실행
+
+실행 전에 먼저 빌드하고, 빌드된 jar를 `--spring.profiles.active` 옵션과 함께 실행합니다.
+Gradle 프로젝트 이름이 `10-3.my-http-mcp-server`(디렉터리명)이므로 Gradle과 Maven의 산출물 jar
+파일명이 다른 점에 유의하세요.
 
 ### Gradle
 
 ```bash
 ./gradlew clean build
-java -jar build/libs/02.http-mcp-server-1.0.0.jar --spring.profiles.active=stateless
+# 산출물: build/libs/10-3.my-http-mcp-server-1.0.0.jar
+
+# stdio 프로필 실행
+java -jar build/libs/10-3.my-http-mcp-server-1.0.0.jar --spring.profiles.active=stdio
+
+# stateful-http 프로필 실행 (세션 유지)
+java -jar build/libs/10-3.my-http-mcp-server-1.0.0.jar --spring.profiles.active=stateful-http
+
+# stateless-http 프로필 실행 (세션 미유지)
+java -jar build/libs/10-3.my-http-mcp-server-1.0.0.jar --spring.profiles.active=stateless-http
 ```
 
 ### Maven
 
 ```bash
 ./mvnw clean package
-java -jar target/http-mcp-server-1.0.0.jar --spring.profiles.active=streamable
+# 산출물: target/http-mcp-server-1.0.0.jar
+
+# stdio 프로필 실행
+java -jar target/http-mcp-server-1.0.0.jar --spring.profiles.active=stdio
+
+# stateful-http 프로필 실행 (세션 유지)
+java -jar target/http-mcp-server-1.0.0.jar --spring.profiles.active=stateful-http
+
+# stateless-http 프로필 실행 (세션 미유지)
+java -jar target/http-mcp-server-1.0.0.jar --spring.profiles.active=stateless-http
 ```
 
-### 실행 스크립트 사용
+> `./gradlew`/`./mvnw` wrapper 실행 파일이 없거나 동작하지 않는 환경이라면, 시스템에 설치된
+> `gradle build -x test` / `mvn clean package -DskipTests` 명령을 대신 사용해도 동일한 결과물이 생성됩니다.
 
-```bash
-./run.sh              # 기본값: stateless 프로필
-./run.sh streamable    # streamable 프로필
-```
+> IDE에서 바로 실행할 경우에는 Run Configuration의 VM/Program 옵션에
+> `--spring.profiles.active=stdio` 처럼 프로필을 지정하거나, 환경변수
+> `SPRING_PROFILES_ACTIVE=stdio`를 설정하세요. 프로필을 지정하지 않으면 MCP 서버가
+> 전송 방식을 결정하지 못해 정상 동작하지 않습니다.
 
-실행 후 아래 엔드포인트를 사용할 수 있습니다. (기본 포트 `8081`)
+`stateful-http`/`stateless-http` 프로필로 실행하면 아래 엔드포인트를 사용할 수 있습니다.
+(기본 포트 `8081`. `stdio` 프로필은 내장 웹 서버가 없으므로 HTTP 엔드포인트가 존재하지 않습니다.)
 
 | 용도 | URL |
 |---|---|
 | MCP 엔드포인트 | `http://localhost:8081/mcp` |
+| REST API (Product) | `http://localhost:8081/api/products` |
 | Swagger UI | `http://localhost:8081/swagger-ui.html` |
 | H2 Console | `http://localhost:8081/h2-console` |
 | Actuator | `http://localhost:8081/actuator` |
 
-## Claude Desktop 연동
+`stdio` 프로필로 실행하면 콘솔에는 아무 로그도 출력되지 않으며(JSON-RPC 메시지와 섞이지 않도록),
+대신 `logs/mcp-server-stdio.log` 파일에서 로그를 확인할 수 있습니다.
 
-Claude Desktop은 Streamable HTTP MCP 서버에 직접 접속하는 기능이 없으므로,
-`mcp-remote` 브릿지(npx)를 통해 로컬 HTTP 엔드포인트에 연결합니다.
-`claude_desktop_config.json`에 아래와 같이 등록합니다.
-
-```json
-{
-  "mcpServers": {
-    "http-mcp-server": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "http://localhost:8081/mcp"
-      ]
-    }
-  }
-}
-```
-
-> STDIO 버전이 `java -jar`로 서버 프로세스 자체를 자식 프로세스로 직접 실행했던 것과 달리,
-> HTTP 버전은 **서버를 먼저 별도로 기동**(`./run.sh`)해 둔 상태에서 Claude Desktop이
-> `mcp-remote`로 그 HTTP 엔드포인트에 접속하는 구조입니다.
-
-등록 후 Claude Desktop을 재시작하면 `getAllUsers`, `createProduct` 등
-`tool` 패키지에 정의한 메서드들을 대화 중 자연어 요청으로 호출할 수 있습니다.
 
 ## Spring AI MCP Client(10-1.mcp-client) 연동
 
-같은 저장소의 `10-1.mcp-client` 프로젝트(Spring AI MCP Client)에서도 이 HTTP 서버에
-직접 접속할 수 있습니다. STDIO 연동이 `spring.ai.mcp.client.stdio.connections`로
-자식 프로세스를 실행했다면, HTTP 연동은 `spring.ai.mcp.client.streamable-http.connections`에
-서버 URL을 등록하는 방식입니다. (`10-1.mcp-client`의
-`src/main/resources/application-stateful-http.yml` / `application-stateless-http.yml` 참고)
+같은 저장소의 `10-1.mcp-client` 프로젝트(Spring AI MCP Client)에서도 이 서버에 접속할 수
+있습니다. 연동 방식은 이 서버를 어떤 프로필로 기동했는지에 따라 달라집니다.
+
+- `stdio` 프로필로 기동한 서버 → 클라이언트가 `spring.ai.mcp.client.stdio.connections`에
+  `command`/`args`를 등록해 서버 프로세스를 자식 프로세스로 직접 실행
+- `stateful-http`/`stateless-http` 프로필로 기동한 서버 → 클라이언트가
+  `spring.ai.mcp.client.streamable-http.connections`에 서버 URL을 등록해 접속
 
 ```yaml
 spring:
@@ -342,18 +385,18 @@ spring:
         type: SYNC
         streamable-http:
           connections:
-            # 02.http-mcp-server(User/Product MCP Tool) 연결
+            # 10-3.my-http-mcp-server(User/Product MCP Tool) 연결
             tool-server:
               url: http://localhost:8081
               endpoint: /mcp
 ```
 
-- STDIO 방식은 클라이언트가 서버 프로세스를 직접 자식 프로세스로 실행(`command`/`args`)했지만,
-  HTTP 방식은 **서버가 먼저 기동되어 있어야** 하며, 클라이언트는 `url`/`endpoint`로 접속만 합니다.
-- `02.http-mcp-server`를 원하는 프로필(`stateless` 또는 `streamable`)로 먼저 실행한 뒤,
-  `10-1.mcp-client`를 해당 프로필(`stateless-http` 또는 `stateful-http`)로 실행하면 됩니다.
-- 연결 전 반드시 `./gradlew build` 또는 `./mvnw package`로 `02.http-mcp-server`를 빌드하고,
-  `./run.sh [stateless|streamable]` 등으로 서버를 먼저 기동해 두어야 합니다.
+- HTTP 프로필로 연동할 때는 **서버가 먼저 기동되어 있어야** 하며, 클라이언트는 `url`/`endpoint`로
+  접속만 합니다. stdio 프로필로 연동할 때는 클라이언트가 서버 프로세스를 직접 실행하므로 서버를
+  미리 띄워둘 필요가 없습니다.
+- 연결 전 반드시 `./gradlew build` 또는 `./mvnw package`로 `10-3.my-http-mcp-server`를 빌드해
+  두어야 하며, HTTP 프로필로 연동할 경우 `java -jar ... --spring.profiles.active=stateful-http`
+  (또는 `stateless-http`)로 서버를 먼저 기동해 두어야 합니다.
 
-등록 후 `10-1.mcp-client`를 실행하면, `stdio-mcp-server`와 마찬가지로 User/Product
-관련 도구들이 클라이언트에서 자동으로 인식되어 호출할 수 있습니다.
+등록 후 `10-1.mcp-client`를 실행하면 User/Product 관련 도구들이 클라이언트에서 자동으로
+인식되어 호출할 수 있습니다.
