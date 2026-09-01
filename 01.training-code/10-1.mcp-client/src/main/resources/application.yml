@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: stdio
   application:
     name: my-spring-ai
 

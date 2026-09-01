@@ -6,7 +6,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.mcp.SyncMcpToolCallbackProvider;
+import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,11 +22,11 @@ import jakarta.servlet.http.HttpSession;
 public class ChatController {
 
     private final ChatClient chatClient;
-    private final SyncMcpToolCallbackProvider mcpToolCallbackProvider;
+    private final ToolCallbackProvider mcpToolCallbackProvider;
 
     // Autoconfigured ChatClient.Builder is injected
     public ChatController(ChatModel chatModel, ChatMemory chatMemory,
-            SyncMcpToolCallbackProvider mcpToolCallbackProvider) {
+            ToolCallbackProvider mcpToolCallbackProvider) {
         this.chatClient = ChatClient.builder(chatModel)
                 .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build(), new SimpleLoggerAdvisor())
                 .build();
